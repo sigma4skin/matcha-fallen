@@ -3523,7 +3523,7 @@ local function renderToggleExtras(item, rowX, rowY, rowW, click, rightClick, tra
 
         local modeLabel = item.keybind.mode == "Toggle" and "[Toggle]" or item.keybind.mode == "Always" and "[Always]" or "[Hold]"
         local modeLabelColor = item.keybind.mode == "Hold" and Theme.sub or Theme.accent
-        txt(modeLabel, keyX + neededW / 2, rowY + 22, modeLabelColor, 9, FontUI, 52, true, false, neededW, trans)
+        --txt(modeLabel, keyX + neededW / 2, rowY + 22, modeLabelColor, 9, FontUI, 52, true, false, neededW, trans)
 
         if item.keybind.listening then
             for j = 1, 8 do
