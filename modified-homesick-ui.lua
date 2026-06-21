@@ -3517,7 +3517,7 @@ local function renderToggleExtras(item, rowX, rowY, rowW, click, rightClick, tra
         rect(keyX, rowY + 3, neededW, 20, Theme.surface3, 45, 4, trans)
         strokeRect(keyX, rowY + 3, neededW, 20, hovered and Theme.accent or Theme.border, 46, 4, trans)
 
-        --txt(textToDraw, keyX + neededW / 2, centerY(rowY + 3, 20), (item.keybind.listening or item.keybind.value) and Theme.text or Theme.sub, 12, FontUI, 52, true, false, neededW - 4, trans)
+        txt(textToDraw, keyX + neededW / 2, centerY(rowY + 3, 20), (item.keybind.listening or item.keybind.value) and Theme.text or Theme.sub, 12, FontUI, 52, true, false, neededW - 4, trans)
 
         local modeLabel = item.keybind.mode == "Toggle" and "[Toggle]" or item.keybind.mode == "Always" and "[Always]" or "[Hold]"
         local modeLabelColor = item.keybind.mode == "Hold" and Theme.sub or Theme.accent
