@@ -428,6 +428,7 @@ do
 			local HeldWeapon = GetHeldWeapon(Char)
 			local Info = GetBulletInfo(HeldWeapon)
 			if not Info then
+				Camera.lookAt(Camera.Position, Flags.LockedTarget.TargetPart.Position)
 				return
 			end
 
@@ -435,7 +436,7 @@ do
 				local Drop =
 					CalculateDrop(Info.Speed, Info.Gravity, Flags.LockedTarget.TargetPart.Position, Camera.Position)
 				TargetPos = Flags.LockedTarget.TargetPart.Position + Vector3.new(0, Drop, 0)
-			else
+			else 
 				if HeldWeapon == "Wooden Bow" or HeldWeapon == "Crossbow" then
 					TargetPos = CalculateTargetPositionNoYPred(
 						Info.Speed,
