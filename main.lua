@@ -194,6 +194,11 @@ local function FindClosestViableTarget()
 			continue
 		end
 
+		-- team check
+		if Player.Team == LocalPlayer.Team then
+			continue
+		end
+
 		local Char = Player.Character
 		if not Char then
 			continue
@@ -349,6 +354,9 @@ UI.AddTab("Fallen", function(Tab)
         Combat:SliderInt("AimbotMaxDistance", "Max Distance", 50, 1500, 1000, function(V)
             Flags.AimbotMaxDistance = V
         end)
+		Combat:Toggle("TeamCheck", "Team Check", false, function(Bool)
+			Flags.TeamCheck = Bool
+		end)
         Combat:Toggle("SafezoneCheck", "Safezone Check", false, function(Bool)
             Flags.SafezoneCheck = Bool
         end)
@@ -404,6 +412,13 @@ UI.AddTab("Fallen", function(Tab)
     elseif Visuals.page == 1 then
 		-- todo later maybe if matcha doesnt piss me off that much
     end
+
+	-- movement section
+	local Movement = Tab:Section("Movement", "Left", { "No Clip" })
+
+	if Movement.page == 0 then
+		
+	end
 end)
 -- end of ui
 
