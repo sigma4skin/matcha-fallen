@@ -329,6 +329,40 @@ end
 -- keybinds so i can call isenabled later
 local AimbotKeybind
 
+--[[
+-- ui
+local Lib
+local CB = ""
+pcall(function() CB = "?cb=" .. tostring(math.floor((((tick and tick()) or os.clock() or 1)) * 1000) % 2000000000) end)
+for _ = 1, 6 do
+    local ok, res = pcall(function() return loadstring(game:HttpGet("https://raw.githubusercontent.com/neaxusxgod-png/INS-ui/main/uilib.lua" .. CB))() end)
+    if ok and type(res) == "table" then Lib = res; break end
+    if type(INSui) == "table" then Lib = INSui; break end
+    task.wait(0.4)
+end
+if type(Lib) ~= "table" then return warn("INS ui failed to load, run again") end
+Lib:ApplyThemePreset("NeverBlox")
+
+local Win = Lib:CreateWindow({
+	title = "Best Fallen Script",
+	subtitle = "auto",
+	size = Vector2.new(700, 552),
+	menukey = "rightshift",
+	autoSave = true,
+	configname = "BestFallenScript",
+})
+Win:AddSettingsTab()
+
+-- combat tab
+local CombatTab = Win:Tab("Combat", "swords")
+
+local AimbotSection = CombatTab:Section("Aimbot", "Left")
+local AimbotToggle = AimbotSection:Toggle("Aimbot", false):AddKeybind("")
+-- end of combat tab
+
+-- end of ui
+--]]
+
 UI.AddTab("Fallen", function(Tab)
 	-- combat section
 	local Combat = Tab:Section("Combat", "Left", { "Aimbot", "Gun Mods" })
@@ -583,17 +617,79 @@ do
 		return nil
 	end
 
-	-- caching shit
-	local SlotCache = {}
-	local SlotCacheTarget = nil
+	local function FindClosestArmorTarget()
+		local ClosestTarget
+		local ClosestDistance = math.huge
+		local Mouse = LocalPlayer:GetMouse()
+		local MousePos = Vector2.new(Mouse.X, Mouse.Y)
+		local LocalChar = LocalPlayer.Character
+		if not LocalChar then
+			return nil
+		end
+		local LocalRoot = LocalChar:FindFirstChild("HumanoidRootPart")
 
-	local function RebuildSlotCache()
-		SlotCache = {}
-		if not Flags.LockedTarget then
-			return
+		for _, Player in Players:GetPlayers() do
+			if Player.Name == LocalPlayer.Name then
+				continue
+			end
+			if Flags.TeamCheck and Player.Team == LocalPlayer.Team then
+				continue
+			end
+
+			local Char = Player.Character
+			if not Char then
+				continue
+			end
+			local Head = Char:FindFirstChild("Head")
+			if not Head then
+				continue
+			end
+			local Humanoid = Char:FindFirstChild("Humanoid")
+			if not Humanoid or Humanoid.Health <= 0 then
+				continue
+			end
+			local HRP = Char:FindFirstChild("HumanoidRootPart")
+			if not HRP then
+				continue
+			end
+
+			if Flags.SafezoneCheck then
+				local Ok, V = pcall(function()
+					return Player:GetAttribute("SafeZone")
+				end)
+				if not Ok or V then
+					continue
+				end
+			end
+
+			if LocalRoot and (LocalRoot.Position - HRP.Position).Magnitude > (Flags.AimbotMaxDistance or 1000) then
+				continue
+			end
+
+			local ScreenPos, OnScreen = WorldToScreen(Head.Position)
+			if not OnScreen then
+				continue
+			end
+
+			local dx = ScreenPos.X - MousePos.X
+			local dy = ScreenPos.Y - MousePos.Y
+			local Distance = math.sqrt(dx * dx + dy * dy)
+
+			if Distance < ClosestDistance then
+				ClosestDistance = Distance
+				ClosestTarget = { Player = Player, Character = Char, Humanoid = Humanoid }
+			end
 		end
 
-		local Char = Flags.LockedTarget.Character
+		return ClosestTarget
+	end
+
+	-- caching shit
+	local SlotCache = {}
+	local SlotCacheTargetChar = nil
+
+	local function RebuildSlotCache(Char)
+		SlotCache = {}
 		if not Char then
 			return
 		end
@@ -629,6 +725,8 @@ do
 	-- throttled cache refresh vars
 	local SlotCacheLastUpdate = 0
 	local SLOT_CACHE_INTERVAL = 1 -- refresh slot cache every second (if your looking at these and your fps is shit change these)
+	local TargetLastUpdate = 0
+	local TARGET_INTERVAL = 0.5
 
 	RunService.RenderStepped:Connect(function() -- visuals loop
 		local Camera = Workspace.CurrentCamera
@@ -640,22 +738,24 @@ do
 		local Viewport = Camera.ViewportSize
 		local Now = tick()
 
-		-- refresh slot cache on interval
-		if SlotCacheTarget ~= Flags.LockedTarget or Now - SlotCacheLastUpdate >= SLOT_CACHE_INTERVAL then
+		if Flags.LockedTarget and Flags.LockedTarget.Character then
+			ArmorTarget = Flags.LockedTarget
+		elseif Now - TargetLastUpdate >= TARGET_INTERVAL then
+			TargetLastUpdate = Now
+			ArmorTarget = FindClosestArmorTarget()
+		end
+
+		-- refresh slot cache when target changes or interval elapsed
+		local CurrentChar = ArmorTarget and ArmorTarget.Character or nil
+		if SlotCacheTargetChar ~= CurrentChar or Now - SlotCacheLastUpdate >= SLOT_CACHE_INTERVAL then
 			SlotCacheLastUpdate = Now
-			SlotCacheTarget = Flags.LockedTarget
-			RebuildSlotCache()
+			SlotCacheTargetChar = CurrentChar
+			RebuildSlotCache(CurrentChar)
 		end
 
 		-- armor viewer
 		if Flags.ArmorViewer and Flags.LockedTarget then
 			UpdateSlotCacheImages()
-
-			local ActiveCount = #SlotCache
-			if ActiveCount == 0 then
-				HideAllSlots()
-				return
-			end
 
 			local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
 			local StartX = (Viewport.X - TotalWidth) / 2
