@@ -118,6 +118,14 @@ local function DisableInstantBullet()
 	applygc(Cache, "SpeedMult", 1)
 end
 
+local function EnableExtendRange()
+	applygc(Cache, "RangeMult", 10)
+end
+
+local function DisableExtendRange()
+	applygc(Cache, "RangeMult", 1)
+end
+
 local function EnableNoSpread()
 	applygc(Cache, "AimSpreadMult", -1)
 	applygc(Cache, "HipSpreadMult", -1)
@@ -368,6 +376,13 @@ UI.AddTab("Fallen", function(Tab)
                 EnableInstantBullet()
             else
                 DisableInstantBullet()
+            end
+        end)
+        Combat:Toggle("ExtendRange", "Extend Range", false, function(Bool)
+            if Bool then
+                EnableExtendRange()
+            else
+                DisableExtendRange()
             end
         end)
         Combat:Toggle("NoSpread", "No Spread", false, function(Bool)
