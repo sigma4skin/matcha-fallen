@@ -110,14 +110,6 @@ local function DisableNoRecoil()
 	applygc(Cache, "RecoilMult", 1)
 end
 
-local function EnableInstantBullet()
-	applygc(Cache, "SpeedMult", 100)
-end
-
-local function DisableInstantBullet()
-	applygc(Cache, "SpeedMult", 1)
-end
-
 local function EnableExtendRange()
 	applygc(Cache, "RangeMult", 10)
 end
