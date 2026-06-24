@@ -338,86 +338,100 @@ end
 local AimbotKeybind
 
 UI.AddTab("Fallen", function(Tab)
-    -- combat section
-    local Combat = Tab:Section("Combat", "Left", { "Aimbot", "Gun Mods" })
+	-- combat section
+	local Combat = Tab:Section("Combat", "Left", { "Aimbot", "Gun Mods" })
 
-    if Combat.page == 0 then
-        -- aimbot
-        Combat:Toggle("AimbotOn", "Aimbot", false, function(Bool)
-            Flags.Aimbot = Bool
-        end)
-        AimbotKeybind = Combat:Keybind("AimbotKeybind", Enum.KeyCode.MouseButton2, "hold")
-        AimbotKeybind:AddToHotkey("Aimbot", "AimbotOn")
-        Combat:Combo("TargetPart", "Target Part", { "Head", "Humanoid Root Part", "Closest" }, 0, function(Idx, Text)
-            Flags.AimbotTargetPart = Text
-        end)
-        Combat:SliderInt("AimbotMaxDistance", "Max Distance", 50, 1500, 1000, function(V)
-            Flags.AimbotMaxDistance = V
-        end)
+	if Combat.page == 0 then
+		-- aimbot
+		Combat:Toggle("AimbotOn", "Aimbot", false, function(Bool)
+			Flags.Aimbot = Bool
+		end)
+		AimbotKeybind = Combat:Keybind("AimbotKeybind", Enum.KeyCode.MouseButton2, "hold")
+		AimbotKeybind:AddToHotkey("Aimbot", "AimbotOn")
+		Combat:Combo("TargetPart", "Target Part", { "Head", "Humanoid Root Part", "Closest" }, 0, function(Idx, Text)
+			Flags.AimbotTargetPart = Text
+		end)
+		Combat:SliderInt("AimbotMaxDistance", "Max Distance", 50, 1500, 1000, function(V)
+			Flags.AimbotMaxDistance = V
+		end)
 		Combat:Toggle("TeamCheck", "Team Check", false, function(Bool)
 			Flags.TeamCheck = Bool
 		end)
-        Combat:Toggle("SafezoneCheck", "Safezone Check", false, function(Bool)
-            Flags.SafezoneCheck = Bool
-        end)
-        Combat:Toggle("FovCheck", "FOV Check", false, function(Bool)
-            Flags.AimbotFovCheck = Bool
-        end)
-        Combat:SliderInt("FovCheckRadius", "FOV Radius", 10, 250, 50, function(V)
-            Flags.AimbotFovRadius = V
-        end)
-        Combat:Toggle("Snapline", "Snapline", false, function(Bool)
-            Flags.Snapline = Bool
-        end)
-    elseif Combat.page == 1 then
-        -- gun mods
-        Combat:Toggle("NoRecoil", "No Recoil", false, function(Bool)
+		Combat:Toggle("SafezoneCheck", "Safezone Check", false, function(Bool)
+			Flags.SafezoneCheck = Bool
+		end)
+		Combat:Toggle("FovCheck", "FOV Check", false, function(Bool)
+			Flags.AimbotFovCheck = Bool
+		end)
+		Combat:SliderInt("FovCheckRadius", "FOV Radius", 10, 250, 50, function(V)
+			Flags.AimbotFovRadius = V
+		end)
+		Combat:Toggle("Snapline", "Snapline", false, function(Bool)
+			Flags.Snapline = Bool
+		end)
+	elseif Combat.page == 1 then
+		-- gun mods
+		Combat:Toggle("NoRecoil", "No Recoil", false, function(Bool)
 			if Bool then
 				EnableNoRecoil()
 			else
 				DisableNoRecoil()
 			end
 		end)
-        Combat:Toggle("InstantBullet", "Instant Bullet", false, function(Bool)
-            Flags.InstantBullet = Bool
-            if Bool then
-                EnableInstantBullet()
-            else
-                DisableInstantBullet()
-            end
-        end)
-        Combat:Toggle("ExtendRange", "Extend Range", false, function(Bool)
-            if Bool then
-                EnableExtendRange()
-            else
-                DisableExtendRange()
-            end
-        end)
-        Combat:Toggle("NoSpread", "No Spread", false, function(Bool)
-            if Bool then
-                EnableNoSpread()
-            else
-                DisableNoSpread()
-            end
-        end)
-    end
+		Combat:Toggle("InstantBullet", "Instant Bullet", false, function(Bool)
+			Flags.InstantBullet = Bool
+			if Bool then
+				EnableInstantBullet()
+			else
+				DisableInstantBullet()
+			end
+		end)
+		Combat:Toggle("ExtendRange", "Extend Range", false, function(Bool)
+			if Bool then
+				EnableExtendRange()
+			else
+				DisableExtendRange()
+			end
+		end)
+		Combat:Toggle("NoSpread", "No Spread", false, function(Bool)
+			if Bool then
+				EnableNoSpread()
+			else
+				DisableNoSpread()
+			end
+		end)
+	end
 
-    -- visuals section
-    local Visuals = Tab:Section("Visuals", "Right", { "Player", "AI" })
+	-- visuals section
+	local Visuals = Tab:Section("Visuals", "Right", { "Player", "AI" })
 
-    if Visuals.page == 0 then
-        Visuals:Toggle("ArmorViewer", "Armor Viewer", false, function(Bool)
-            Flags.ArmorViewer = Bool
-        end)
-    elseif Visuals.page == 1 then
+	if Visuals.page == 0 then
+		Visuals:Toggle("ArmorViewer", "Armor Viewer", false, function(Bool)
+			Flags.ArmorViewer = Bool
+		end)
+	elseif Visuals.page == 1 then
 		-- todo later maybe if matcha doesnt piss me off that much
-    end
+	end
 
 	-- movement section
 	local Movement = Tab:Section("Movement", "Left", { "No Clip" })
 
 	if Movement.page == 0 then
-		
+		Movement:Toggle("CardNoClip", "Card Noclip", false, function(Bool)
+			Flags.CardNoClip = Bool
+
+			for _, Part in Cache.Workspace.RocketFactoryPinkCardInvisWalls:GetChildren() do
+				if Part:IsA("MeshPart") then
+					Part.CanCollide = not Bool
+				end
+			end
+
+			for _, Part in Cache.Workspace.Monuments:GetDescendants() do
+				if Part:IsA("MeshPart") and Part.Name:find("FallenShippingContainer") then
+					Part.CanCollide = not Bool
+				end
+			end
+		end)
 	end
 end)
 -- end of ui
@@ -451,7 +465,7 @@ do
 				local Drop =
 					CalculateDrop(Info.Speed, Info.Gravity, Flags.LockedTarget.TargetPart.Position, Camera.Position)
 				TargetPos = Flags.LockedTarget.TargetPart.Position + Vector3.new(0, Drop, 0)
-			else 
+			else
 				if HeldWeapon == "Wooden Bow" or HeldWeapon == "Crossbow" then
 					TargetPos = CalculateTargetPositionNoYPred(
 						Info.Speed,
@@ -475,241 +489,248 @@ do
 			Flags.LockedTarget = nil
 		end
 	end) -- end of targetting loop
+end
 
-	do
-		local FovCircle = Drawing.new("Circle")
-		FovCircle.Thickness = 1
-		FovCircle.NumSides = 120
-		local FovCircleOutline = Drawing.new("Circle")
-		FovCircleOutline.Thickness = 1
-		FovCircle.NumSides = FovCircle.NumSides
+do
+	local FovCircle = Drawing.new("Circle")
+	FovCircle.Thickness = 1
+	FovCircle.NumSides = 120
+	local FovCircleOutline = Drawing.new("Circle")
+	FovCircleOutline.Thickness = 1
+	FovCircle.NumSides = FovCircle.NumSides
 
-		local Snapline = Drawing.new("Line")
-		Snapline.Thickness = 1
-		local SnaplineOutline = Drawing.new("Line")
-		SnaplineOutline.Thickness = 3
+	local Snapline = Drawing.new("Line")
+	Snapline.Thickness = 1
+	local SnaplineOutline = Drawing.new("Line")
+	SnaplineOutline.Thickness = 3
 
-		RunService.RenderStepped:Connect(function() -- targetting visuals
-			local Mouse = LocalPlayer:GetMouse()
-			local MousePos = Vector2.new(Mouse.X, Mouse.Y)
+	RunService.RenderStepped:Connect(function() -- targetting visuals
+		local Mouse = LocalPlayer:GetMouse()
+		local MousePos = Vector2.new(Mouse.X, Mouse.Y)
 
-			if Flags.Aimbot and Flags.AimbotFovCheck then
-				FovCircleOutline.Position = MousePos
-				FovCircleOutline.Radius = Flags.AimbotFovRadius - 1
-				FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
-				FovCircleOutline.Visible = true
+		if Flags.Aimbot and Flags.AimbotFovCheck then
+			FovCircleOutline.Position = MousePos
+			FovCircleOutline.Radius = Flags.AimbotFovRadius - 1
+			FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
+			FovCircleOutline.Visible = true
 
-				FovCircleOutline.Position = MousePos
-				FovCircleOutline.Radius = Flags.AimbotFovRadius + 1
-				FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
-				FovCircleOutline.Visible = true
+			FovCircleOutline.Position = MousePos
+			FovCircleOutline.Radius = Flags.AimbotFovRadius + 1
+			FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
+			FovCircleOutline.Visible = true
 
-				FovCircle.Position = MousePos
-				FovCircle.Radius = Flags.AimbotFovRadius
-				FovCircle.Color = Color3.fromRGB(255, 255, 255)
-				FovCircle.ZIndex = 5
-				FovCircle.Outline = true
-				FovCircle.Visible = true
-			elseif not Flags.AimbotFovCheck or not Flags.Aimbot then
-				FovCircle.Visible = false
-				FovCircleOutline.Visible = false
+			FovCircle.Position = MousePos
+			FovCircle.Radius = Flags.AimbotFovRadius
+			FovCircle.Color = Color3.fromRGB(255, 255, 255)
+			FovCircle.ZIndex = 5
+			FovCircle.Outline = true
+			FovCircle.Visible = true
+		elseif not Flags.AimbotFovCheck or not Flags.Aimbot then
+			FovCircle.Visible = false
+			FovCircleOutline.Visible = false
+		end
+		if Flags.Snapline and Flags.Aimbot and AimbotKeybind:IsEnabled() and Flags.LockedTarget then
+			local ScreenPos, OnScreen = WorldToScreen(Flags.LockedTarget.TargetPart.Position)
+			if not OnScreen then
+				return
 			end
-			if Flags.Snapline and Flags.Aimbot and AimbotKeybind:IsEnabled() and Flags.LockedTarget then
-				local ScreenPos, OnScreen = WorldToScreen(Flags.LockedTarget.TargetPart.Position)
-				if not OnScreen then
-					return
-				end
 
-				Snapline.From = MousePos
-				Snapline.To = ScreenPos
-				Snapline.Color = Color3.fromRGB(255, 255, 255)
-				Snapline.ZIndex = 5
-				Snapline.Visible = true
+			Snapline.From = MousePos
+			Snapline.To = ScreenPos
+			Snapline.Color = Color3.fromRGB(255, 255, 255)
+			Snapline.ZIndex = 5
+			Snapline.Visible = true
 
-				SnaplineOutline.From = MousePos
-				SnaplineOutline.To = ScreenPos
-				SnaplineOutline.Color = Color3.fromRGB(0, 0, 0)
-				SnaplineOutline.Visible = true
-			elseif Flags.Snapline and not Flags.LockedTarget then
-				Snapline.Visible = false
-				SnaplineOutline.Visible = false
-			end
-		end)
+			SnaplineOutline.From = MousePos
+			SnaplineOutline.To = ScreenPos
+			SnaplineOutline.Color = Color3.fromRGB(0, 0, 0)
+			SnaplineOutline.Visible = true
+		elseif Flags.Snapline and not Flags.LockedTarget then
+			Snapline.Visible = false
+			SnaplineOutline.Visible = false
+		end
+	end)
+end
+
+do
+	-- armor viewer vars
+	local BoxCount = 8
+	local BoxSize = 64 -- width and height of each box
+	local BoxSpacing = 5 -- gap between boxes
+	local TopMargin = 55 -- distance from top of screen
+	local BoxRounding = 10
+	local BgColor = Color3.fromRGB(71, 71, 71) -- remember to do 0.45 transparency cus no color4 (fuck matcha)
+	local BgTransparency = 0.55
+
+	-- image cache
+	local ImageCache = {}
+	local ImageBaseUrl = "https://raw.githubusercontent.com/sigma4skin/matcha-fallen/main/armor_images/"
+
+	local SlotDrawings = {}
+	for i = 1, BoxCount do
+		local Bg = Drawing.new("Square")
+		Bg.Filled = true
+		Bg.Visible = false
+		Bg.Transparency = BgTransparency
+		Bg.Color = BgColor
+		Bg.Corner = BoxRounding
+		Bg.ZIndex = 4
+
+		local Img = Drawing.new("Image")
+		Img.Visible = false
+		Img.ZIndex = 5
+
+		SlotDrawings[i] = { Bg = Bg, Img = Img, LastIcon = nil }
 	end
 
-	do
-		-- armor viewer vars
-		local BoxCount = 8
-		local BoxSize = 64 -- width and height of each box
-		local BoxSpacing = 5 -- gap between boxes
-		local TopMargin = 55 -- distance from top of screen
-		local BoxRounding = 10
-		local BgColor = Color3.fromRGB(71, 71, 71) -- remember to do 0.45 transparency cus no color4 (fuck matcha)
-		local BgTransparency = 0.55
-
-		-- image cache
-		local ImageCache = {}
-		local ImageBaseUrl = "https://raw.githubusercontent.com/sigma4skin/matcha-fallen/main/armor_images/"
-
-		local SlotDrawings = {}
+	local function HideAllSlots()
 		for i = 1, BoxCount do
-			local Bg = Drawing.new("Square")
-			Bg.Filled = true
-			Bg.Visible = false
-			Bg.Transparency = BgTransparency
-			Bg.Color = BgColor
-			Bg.Corner = BoxRounding
-			Bg.ZIndex = 4
-
-			local Img = Drawing.new("Image")
-			Img.Visible = false
-			Img.ZIndex = 5
-
-			SlotDrawings[i] = { Bg = Bg, Img = Img, LastIcon = nil }
+			SlotDrawings[i].Bg.Visible = false
+			SlotDrawings[i].Img.Visible = false
 		end
+	end
 
-		local function HideAllSlots()
-			for i = 1, BoxCount do
-				SlotDrawings[i].Bg.Visible = false
-				SlotDrawings[i].Img.Visible = false
-			end
-		end
-
-		-- caching helper functions for armor viewer
-		local function GetImage(ArmorId)
-			if not ArmorId then
-				return nil
-			end
-
-			local Cached = ImageCache[ArmorId]
-			if Cached ~= nil then
-				return Cached or nil
-			end
-
-			ImageCache[ArmorId] = false
-
-			-- fetch from github
-			local Url = ImageBaseUrl .. ArmorId .. ".png"
-			task.spawn(function()
-				local Ok, Data = pcall(function()
-					return game:HttpGet(Url)
-				end)
-
-				if not Ok or not Data then
-					ImageCache[ArmorId] = false
-					warn("Failed to load image for ", ArmorId)
-					return
-				end
-
-				ImageCache[ArmorId] = Data
-			end)
-
+	-- caching helper functions for armor viewer
+	local function GetImage(ArmorId)
+		if not ArmorId then
 			return nil
 		end
 
-		-- caching shit
-		local SlotCache = {}
-		local SlotCacheTarget = nil
-
-		local function RebuildSlotCache()
-			SlotCache = {}
-			if not Flags.LockedTarget then
-				return
-			end
-
-			local Char = Flags.LockedTarget.Character
-			if not Char then
-				return
-			end
-
-			local Seen = {}
-			local Idx = 1
-
-			for _, Child in Char:GetChildren() do
-				if Idx > BoxCount then
-					break
-				end
-
-				local ArmorId = Child.Name:match("^Armor_%d+")
-				if ArmorId and not Seen[ArmorId] then
-					Seen[ArmorId] = true
-					SlotCache[Idx] = { ArmorId = ArmorId, Icon = GetImage(ArmorId) }
-					Idx += 1
-				end
-			end
+		local Cached = ImageCache[ArmorId]
+		if Cached ~= nil then
+			return Cached or nil
 		end
 
-		local function UpdateSlotCacheImages()
-			for I, Slot in SlotCache do
-				if Slot and not Slot.Icon then
-					local Img = ImageCache[Slot.ArmorId]
-					if Img then
-						Slot.Icon = Img
-					end
-				end
-			end
-		end
+		ImageCache[ArmorId] = false
 
-		-- throttled cache refresh vars
-		local SlotCacheLastUpdate = 0
-		local SLOT_CACHE_INTERVAL = 1 -- refresh slot cache every second (if your looking at these and your fps is shit change these)
+		-- fetch from github
+		local Url = ImageBaseUrl .. ArmorId .. ".png"
+		task.spawn(function()
+			local Ok, Data = pcall(function()
+				return game:HttpGet(Url)
+			end)
 
-		RunService.RenderStepped:Connect(function() -- visuals loop
-			local Camera = Workspace.CurrentCamera
-			if not Camera then
-				HideAllSlots()
+			if not Ok or not Data then
+				ImageCache[ArmorId] = false
+				warn("Failed to load image for ", ArmorId)
 				return
 			end
 
-			local Viewport = Camera.ViewportSize
-			local Now = tick()
+			ImageCache[ArmorId] = Data
+		end)
 
-			-- refresh slot cache on interval
-			if SlotCacheTarget ~= Flags.LockedTarget or Now - SlotCacheLastUpdate >= SLOT_CACHE_INTERVAL then
-				SlotCacheLastUpdate = Now
-				SlotCacheTarget = Flags.LockedTarget
-				RebuildSlotCache()
-			end
-
-			-- armor viewer
-			if Flags.ArmorViewer and Flags.LockedTarget then
-				UpdateSlotCacheImages()
-
-				local ActiveCount = #SlotCache
-				if ActiveCount == 0 then
-					HideAllSlots()
-					return
-				end
-
-				local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
-				local StartX = (Viewport.X - TotalWidth) / 2
-				local Y = TopMargin
-
-				for I = 1, BoxCount do
-					local Slot = SlotCache[I]
-					local Draw = SlotDrawings[I]
-					local X = StartX + (I - 1) * (BoxSize + BoxSpacing)
-
-					Draw.Bg.Position = Vector2.new(X, Y)
-					Draw.Bg.Size = Vector2.new(BoxSize, BoxSize)
-					Draw.Bg.Visible = true
-
-					if Slot ~= nil and Slot.Icon ~= nil then
-						if Draw.LastIcon ~= Slot.Icon then
-							Draw.Img.Data = Slot.Icon
-							Draw.LastIcon = Slot.Icon
-						end
-						Draw.Img.Position = Vector2.new(X + 2, Y + 2)
-						Draw.Img.Size = Vector2.new(BoxSize - 4, BoxSize - 4)
-						Draw.Img.Visible = true
-					else
-						Draw.Img.Visible = false
-						Draw.LastIcon = nil
-					end
-				end
-			else
-				HideAllSlots()
-			end
-		end) -- end of visuals loop
+		return nil
 	end
+
+	-- caching shit
+	local SlotCache = {}
+	local SlotCacheTarget = nil
+
+	local function RebuildSlotCache()
+		SlotCache = {}
+		if not Flags.LockedTarget then
+			return
+		end
+
+		local Char = Flags.LockedTarget.Character
+		if not Char then
+			return
+		end
+
+		local Seen = {}
+		local Idx = 1
+
+		for _, Child in Char:GetChildren() do
+			if Idx > BoxCount then
+				break
+			end
+
+			local ArmorId = Child.Name:match("^Armor_%d+")
+			if ArmorId and not Seen[ArmorId] then
+				Seen[ArmorId] = true
+				SlotCache[Idx] = { ArmorId = ArmorId, Icon = GetImage(ArmorId) }
+				Idx += 1
+			end
+		end
+	end
+
+	local function UpdateSlotCacheImages()
+		for I, Slot in SlotCache do
+			if Slot and not Slot.Icon then
+				local Img = ImageCache[Slot.ArmorId]
+				if Img then
+					Slot.Icon = Img
+				end
+			end
+		end
+	end
+
+	-- throttled cache refresh vars
+	local SlotCacheLastUpdate = 0
+	local SLOT_CACHE_INTERVAL = 1 -- refresh slot cache every second (if your looking at these and your fps is shit change these)
+
+	RunService.RenderStepped:Connect(function() -- visuals loop
+		local Camera = Workspace.CurrentCamera
+		if not Camera then
+			HideAllSlots()
+			return
+		end
+
+		local Viewport = Camera.ViewportSize
+		local Now = tick()
+
+		-- refresh slot cache on interval
+		if SlotCacheTarget ~= Flags.LockedTarget or Now - SlotCacheLastUpdate >= SLOT_CACHE_INTERVAL then
+			SlotCacheLastUpdate = Now
+			SlotCacheTarget = Flags.LockedTarget
+			RebuildSlotCache()
+		end
+
+		-- armor viewer
+		if Flags.ArmorViewer and Flags.LockedTarget then
+			UpdateSlotCacheImages()
+
+			local ActiveCount = #SlotCache
+			if ActiveCount == 0 then
+				HideAllSlots()
+				return
+			end
+
+			local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
+			local StartX = (Viewport.X - TotalWidth) / 2
+			local Y = TopMargin
+
+			for I = 1, BoxCount do
+				local Slot = SlotCache[I]
+				local Draw = SlotDrawings[I]
+				local X = StartX + (I - 1) * (BoxSize + BoxSpacing)
+
+				Draw.Bg.Position = Vector2.new(X, Y)
+				Draw.Bg.Size = Vector2.new(BoxSize, BoxSize)
+				Draw.Bg.Visible = true
+
+				if Slot ~= nil and Slot.Icon ~= nil then
+					if Draw.LastIcon ~= Slot.Icon then
+						Draw.Img.Data = Slot.Icon
+						Draw.LastIcon = Slot.Icon
+					end
+					Draw.Img.Position = Vector2.new(X + 2, Y + 2)
+					Draw.Img.Size = Vector2.new(BoxSize - 4, BoxSize - 4)
+					Draw.Img.Visible = true
+				else
+					Draw.Img.Visible = false
+					Draw.LastIcon = nil
+				end
+			end
+		else
+			HideAllSlots()
+		end
+	end) -- end of visuals loop
+end
+
+do
+	RunService.Heartbeat:Connect(function(Dt)
+		if Flags.CardNoclip then
+		end
+	end)
 end
