@@ -754,7 +754,7 @@ do
 		end
 
 		-- armor viewer
-		if Flags.ArmorViewer and Flags.LockedTarget then
+		if Flags.ArmorViewer then
 			UpdateSlotCacheImages()
 
 			local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
