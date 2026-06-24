@@ -582,6 +582,7 @@ do
 		for i = 1, BoxCount do
 			SlotDrawings[i].Bg.Visible = false
 			SlotDrawings[i].Img.Visible = false
+			SlotDrawings[i].LastIcon = nil
 		end
 	end
 
@@ -728,6 +729,8 @@ do
 	local TargetLastUpdate = 0
 	local TARGET_INTERVAL = 0.5
 
+	local ArmorTarget = nil
+
 	RunService.RenderStepped:Connect(function() -- visuals loop
 		local Camera = Workspace.CurrentCamera
 		if not Camera then
@@ -754,7 +757,7 @@ do
 		end
 
 		-- armor viewer
-		if Flags.ArmorViewer then
+		if Flags.ArmorViewer and ArmorTarget then
 			UpdateSlotCacheImages()
 
 			local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
