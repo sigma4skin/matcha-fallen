@@ -555,7 +555,7 @@ do
 	local TopMargin = 55 -- distance from top of screen
 	local BoxRounding = 10
 	local BgColor = Color3.fromRGB(71, 71, 71) -- remember to do 0.45 transparency cus no color4 (fuck matcha)
-	local BgTransparency = 0.55
+	local BgTransparency = 0.75
 
 	-- image cache
 	local ImageCache = {}
