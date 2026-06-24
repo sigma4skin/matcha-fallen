@@ -348,6 +348,10 @@ UI.AddTab("Fallen", function(Tab)
 		end)
 		AimbotKeybind = Combat:Keybind("AimbotKeybind", Enum.KeyCode.MouseButton2, "hold")
 		AimbotKeybind:AddToHotkey("Aimbot", "AimbotOn")
+		Combat:Toggle("AutoPrediction", "Auto Prediction", false, function(Bool)
+			Flags.AutoPrediction = Bool
+		end)
+		Combat:Tip("Auto Prediction automatically adjusts prediction on velocity and held weapon.")
 		Combat:Combo("TargetPart", "Target Part", { "Head", "Humanoid Root Part", "Closest" }, 0, function(Idx, Text)
 			Flags.AimbotTargetPart = Text
 		end)
@@ -378,14 +382,6 @@ UI.AddTab("Fallen", function(Tab)
 				DisableNoRecoil()
 			end
 		end)
-		Combat:Toggle("InstantBullet", "Instant Bullet", false, function(Bool)
-			Flags.InstantBullet = Bool
-			if Bool then
-				EnableInstantBullet()
-			else
-				DisableInstantBullet()
-			end
-		end)
 		Combat:Toggle("ExtendRange", "Extend Range", false, function(Bool)
 			if Bool then
 				EnableExtendRange()
@@ -412,27 +408,6 @@ UI.AddTab("Fallen", function(Tab)
 	elseif Visuals.page == 1 then
 		-- todo later maybe if matcha doesnt piss me off that much
 	end
-
-	-- movement section
-	local Movement = Tab:Section("Movement", "Left", { "No Clip" })
-
-	if Movement.page == 0 then
-		Movement:Toggle("CardNoClip", "Card Noclip", false, function(Bool)
-			Flags.CardNoClip = Bool
-
-			for _, Part in Cache.Workspace.RocketFactoryPinkCardInvisWalls:GetChildren() do
-				if Part:IsA("MeshPart") then
-					Part.CanCollide = not Bool
-				end
-			end
-
-			for _, Part in Cache.Workspace.Monuments:GetDescendants() do
-				if Part:IsA("MeshPart") and Part.Name:find("FallenShippingContainer") then
-					Part.CanCollide = not Bool
-				end
-			end
-		end)
-	end
 end)
 -- end of ui
 
@@ -456,33 +431,27 @@ do
 			local TargetPos = Flags.LockedTarget.TargetPart.Position
 			local HeldWeapon = GetHeldWeapon(Char)
 			local Info = GetBulletInfo(HeldWeapon)
-			if not Info then
+			if not Info or not Flags.AutoPrediction then
 				Camera.lookAt(Camera.Position, Flags.LockedTarget.TargetPart.Position)
 				return
 			end
 
-			if Flags.InstantBullet then
-				local Drop =
-					CalculateDrop(Info.Speed, Info.Gravity, Flags.LockedTarget.TargetPart.Position, Camera.Position)
-				TargetPos = Flags.LockedTarget.TargetPart.Position + Vector3.new(0, Drop, 0)
+			if HeldWeapon == "Wooden Bow" or HeldWeapon == "Crossbow" then
+				TargetPos = CalculateTargetPositionNoYPred(
+					Info.Speed,
+					Info.Gravity,
+					Flags.LockedTarget.TargetPart.Velocity,
+					Flags.LockedTarget.TargetPart.Position,
+					Camera.Position
+				)
 			else
-				if HeldWeapon == "Wooden Bow" or HeldWeapon == "Crossbow" then
-					TargetPos = CalculateTargetPositionNoYPred(
-						Info.Speed,
-						Info.Gravity,
-						Flags.LockedTarget.TargetPart.Velocity,
-						Flags.LockedTarget.TargetPart.Position,
-						Camera.Position
-					)
-				else
-					TargetPos = CalculateTargetPosition(
-						Info.Speed,
-						Info.Gravity,
-						Flags.LockedTarget.TargetPart.Velocity,
-						Flags.LockedTarget.TargetPart.Position,
-						Camera.Position
-					)
-				end
+				TargetPos = CalculateTargetPosition(
+					Info.Speed,
+					Info.Gravity,
+					Flags.LockedTarget.TargetPart.Velocity,
+					Flags.LockedTarget.TargetPart.Position,
+					Camera.Position
+				)
 			end
 			Camera.lookAt(Camera.Position, TargetPos)
 		else
@@ -726,11 +695,4 @@ do
 			HideAllSlots()
 		end
 	end) -- end of visuals loop
-end
-
-do
-	RunService.Heartbeat:Connect(function(Dt)
-		if Flags.CardNoclip then
-		end
-	end)
 end
