@@ -222,11 +222,6 @@ local function FindClosestViableTarget()
 			continue
 		end
 
-		-- team check
-		if Player.Team == LocalPlayer.Team then
-			continue
-		end
-
 		local Char = Player.Character
 		if not Char then
 			continue
@@ -361,64 +356,6 @@ local function CalculateTargetPositionNoYPred(BulletSpeed, BulletGravity, Veloci
 	return Position + Vector3.new(MovePred.X, 0, MovePred.Z) + Vector3.new(0, Drop, 0)
 end
 
-local function FindClosestArmorTarget()
-	local ClosestTarget
-	local ClosestDistance = math.huge
-	local Mouse = LocalPlayer:GetMouse()
-	local MousePos = Vector2.new(Mouse.X, Mouse.Y)
-	local LocalChar = LocalPlayer.Character
-	if not LocalChar then
-		return nil
-	end
-	local LocalRoot = LocalChar:FindFirstChild("HumanoidRootPart")
-
-	for _, Player in Players:GetPlayers() do
-		if Player.Name == LocalPlayer.Name then
-			continue
-		end
-		if Flags.TeamCheck and Player.Team == LocalPlayer.Team then
-			continue
-		end
-
-		local Char = Player.Character
-		if not Char then
-			continue
-		end
-		local Head = Char:FindFirstChild("Head")
-		if not Head then
-			continue
-		end
-		local Humanoid = Char:FindFirstChild("Humanoid")
-		if not Humanoid or Humanoid.Health <= 0 then
-			continue
-		end
-		local HRP = Char:FindFirstChild("HumanoidRootPart")
-		if not HRP then
-			continue
-		end
-
-		if LocalRoot and (LocalRoot.Position - HRP.Position).Magnitude > (Flags.AimbotMaxDistance or 1000) then
-			continue
-		end
-
-		local ScreenPos, OnScreen = WorldToScreen(Head.Position)
-		if not OnScreen then
-			continue
-		end
-
-		local dx = ScreenPos.X - MousePos.X
-		local dy = ScreenPos.Y - MousePos.Y
-		local Distance = math.sqrt(dx * dx + dy * dy)
-
-		if Distance < ClosestDistance then
-			ClosestDistance = Distance
-			ClosestTarget = { Player = Player, Character = Char, Humanoid = Humanoid }
-		end
-	end
-
-	return ClosestTarget
-end
-
 local function IsCheater(Player)
 	if not Player then
 		return false
@@ -481,9 +418,6 @@ UI.AddTab("Fallen", function(Tab)
 		Combat:SliderInt("AimbotMaxDistance", "Max Distance", 50, 1500, 1000, function(V)
 			Flags.AimbotMaxDistance = V
 		end)
-		Combat:Toggle("TeamCheck", "Team Check", false, function(Bool)
-			Flags.TeamCheck = Bool
-		end)
 		Combat:Toggle("SafezoneCheck", "Safezone Check", false, function(Bool)
 			Flags.SafezoneCheck = Bool
 		end)
@@ -537,28 +471,11 @@ UI.AddTab("Fallen", function(Tab)
 	end
 
 	-- movement section
-	local Movement = Tab:Section("Movement", "Right", { "Movement", "Noclip" })
+	local Movement = Tab:Section("Movement", "Right", { "Movement" })
 	if Movement.page == 0 then
 		Movement:Toggle("BHop", "Bunny Hop", false, function(Bool)
 			Flags.BHop = Bool
 		end)
-	elseif Movement.page == 1 then
-		Movement:Toggle("CardNoclip", "Card Noclip", false, function(Bool)
-			Flags.CardNoclip = Bool
-
-			for _, Part in workspace.RocketFactoryPinkCardInvisWalls:GetChildren() do
-				Part.CanCollide = not Bool
-			end
-
-			for _, Part in workspace.Monuments:GetDescendants() do
-				if Part:IsA("MeshPart") and Part.Name:find("FallenShippingContainer") then
-					Part.CanCollide = not Bool
-				end
-			end
-		end)
-		Movement:Tip(
-			"Only allows you to Noclip through shipping containers and invisible walls at Rocket Factory Pink Card."
-		)
 	end
 
 	-- misc section
@@ -879,17 +796,14 @@ do
 		end
 	end
 
-	-- throttled cache refresh vars (armor viewer)
-	local SlotCacheLastUpdate = 0
-	local SLOT_CACHE_INTERVAL = 1 -- refresh slot cache every second (if your looking at these and your fps is shit change these)
-	local TargetLastUpdate = 0
-	local TARGET_INTERVAL = 0.5
-
-	local ArmorTarget = nil
-
 	-- throttled cache refresh vars (cheater detector)
 	local CheaterDetectorLastUpdate = 0
 	local CHEATER_DETECTOR_INTERVAL = 3
+	
+	-- throttled cache refresh vars (armor viewer)
+	local ArmorViewerLastUpdate = 0
+	local ARMOR_VIEWER_INTERVAL = 2
+	local ArmorViewerTargetChar = nil
 
 	RunService.RenderStepped:Connect(function() -- visuals loop
 		local Camera = Workspace.CurrentCamera
@@ -901,23 +815,17 @@ do
 		local Viewport = Camera.ViewportSize
 		local Now = tick()
 
-		if Flags.LockedTarget and Flags.LockedTarget.Character then
-			ArmorTarget = Flags.LockedTarget
-		elseif Now - TargetLastUpdate >= TARGET_INTERVAL then
-			TargetLastUpdate = Now
-			ArmorTarget = FindClosestArmorTarget()
-		end
-
-		-- refresh slot cache when target changes or interval elapsed
-		local CurrentChar = ArmorTarget and ArmorTarget.Character or nil
-		if SlotCacheTargetChar ~= CurrentChar or Now - SlotCacheLastUpdate >= SLOT_CACHE_INTERVAL then
-			SlotCacheLastUpdate = Now
-			SlotCacheTargetChar = CurrentChar
-			RebuildSlotCache(CurrentChar)
-		end
-
 		-- armor viewer
-		if Flags.ArmorViewer and ArmorTarget then
+		if Flags.ArmorViewer and Flags.LockedTarget then
+			local TargetChar = Flags.LockedTarget.Character
+
+			-- rebuild cache if target changed or interval elapsed
+			if TargetChar ~= ArmorViewerTargetChar or Now - ArmorViewerLastUpdate >= ARMOR_VIEWER_INTERVAL then
+				ArmorViewerLastUpdate = Now
+				ArmorViewerTargetChar = TargetChar
+				RebuildSlotCache(TargetChar)
+			end
+
 			UpdateSlotCacheImages()
 
 			local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
@@ -947,6 +855,11 @@ do
 				end
 			end
 		else
+			-- clear cache vars when disabled or no target
+			if ArmorViewerTargetChar ~= nil then
+				ArmorViewerTargetChar = nil
+				SlotCache = {}
+			end
 			HideAllSlots()
 		end
 
@@ -1013,30 +926,13 @@ do
 end
 
 do
-	local CardNoclipLastUpdate = 0
-	local CARD_NOCLIP_INTERVAL = 3
-
 	RunService.Heartbeat:Connect(function(Dt) -- movement loop
 		local Char = LocalPlayer.Character
 		local Humanoid = Char and Char:FindFirstChild("Humanoid")
-		local Now = tick()
-
-		if Flags.CardNoclip then
-			if Now - CardNoclipLastUpdate >= CARD_NOCLIP_INTERVAL then
-				for _, Part in workspace.RocketFactoryPinkCardInvisWalls:GetChildren() do
-					Part.CanCollide = not Flags.CardNoclip
-				end
-				for _, Part in workspace.Monuments:GetDescendants() do
-					if Part:IsA("MeshPart") and Part.Name:find("FallenShippingContainer") then
-						Part.CanCollide = not Flags.CardNoclip
-					end
-				end
-			end
-		end
 
 		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792 -- number for air
 
-		if Flags.BHop and not InAir and iskeypressed(32) then
+		if Flags.BHop and not InAir and iskeypressed(32) and isrbxactive() then
 			memory_write("byte", Humanoid.Address + Offsets.Humanoid.Jump, 1)
 		end
 	end) -- end of movement loop
