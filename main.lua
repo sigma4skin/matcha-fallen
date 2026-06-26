@@ -15,6 +15,34 @@ Flags.NodeEspDistance = 500
 Flags.MiniEspDistance = 500
 Flags.PlantEspDistance = 500
 Flags.RaidEspDistance = 2000
+Flags.FovColor = Color3.fromRGB(255, 255, 255)
+Flags.FovAlpha = 1
+Flags.SnaplineColor = Color3.fromRGB(255, 255, 255)
+Flags.SnaplineAlpha = 1
+Flags.CheaterDetectorColor = Color3.fromRGB(255, 13, 13)
+Flags.CheaterDetectorAlpha = 1
+Flags.DropsColor = Color3.fromRGB(110, 149, 255)
+Flags.DropsAlpha = 1
+Flags.BodybagColor = Color3.fromRGB(255, 100, 100)
+Flags.BodybagAlpha = 1
+Flags.StoneColor = Color3.new(0.5, 0.5, 0.5)
+Flags.StoneAlpha = 1
+Flags.MetalColor = Color3.new(1, 0.6, 0.1)
+Flags.MetalAlpha = 1
+Flags.PhosphateColor = Color3.new(1, 1, 0.5)
+Flags.PhosphateAlpha = 1
+Flags.WoolColor = Color3.new(0.92, 0.92, 0.92)
+Flags.WoolAlpha = 1
+Flags.TomatoColor = Color3.new(1, 0.18, 0.18)
+Flags.TomatoAlpha = 1
+Flags.PumpkinColor = Color3.new(1, 0.62, 0.13)
+Flags.PumpkinAlpha = 1
+Flags.CornColor = Color3.new(1, 1, 0.22)
+Flags.CornAlpha = 1
+Flags.MinicopterColor = Color3.fromRGB(24, 66, 255)
+Flags.MinicopterAlpha = 1
+Flags.RaidColor = Color3.fromRGB(255, 14, 14)
+Flags.RaidAlpha = 1
 
 local BulletInfo = {
 	["Pumpkin Launcher"] = { Speed = 80, Gravity = 0.16 },
@@ -48,124 +76,108 @@ local BulletInfo = {
 }
 
 local ModeratorIDs = {
-	[51281722] = "Game Moderator", -- KittenBagelz
-	[7178750309] = "Game Moderator", -- Rikumah
-	[113179883] = "Game Moderator", -- DopeIlI
-	[3122439095] = "Game Moderator", -- chancerocke
-	[991290934] = "Game Moderator", -- Lexi34567812
-	[3968854760] = "Game Moderator", -- puferyba
-	[81993536] = "Game Moderator", -- aidenas2011
-	[1004214871] = "Game Moderator", -- owner12310
-	[3034930770] = "Game Moderator", -- Fan_hellrider
-	[2364950171] = "Game Moderator", -- ilovetowerbattle_9
-	[1528346843] = "Game Moderator", -- Hsixienn
-	[165053216] = "Game Moderator", -- coolboyofawsome4
-	[1127954045] = "Game Moderator", -- Kitty_1624
-	[3640120679] = "Game Moderator", -- GamerMauriiYT
-	[602009251] = "Game Moderator", -- Bajoogies_XD
-	[372791101] = "Game Moderator", -- Xion_Light
-	[1378169111] = "Game Moderator", -- Kaz_Elite
-	[3020799797] = "Game Moderator", -- hello_myfriends45
-	[2567998467] = "Game Moderator", -- joax009617
-	[4243907215] = "Game Moderator", -- AaronElagant
-	[353983652] = "Game Moderator", -- Puhgee
-	[1406181681] = "Game Moderator", -- roblox_23193
-	[2229169589] = "Game Moderator", -- fearedbyvamp
-	[3004094651] = "Game Moderator", -- harrib_allsack54321
-	[839333692] = "Game Moderator", -- Matheus06532
-	[979624578] = "Game Moderator", -- B_BEAMO
-	[1478885961] = "Game Moderator", -- fordjdj12
-	[399754916] = "Game Moderator", -- sirfluf
-	[1193091081] = "Game Moderator", -- Weerdeeg
-	[4553863490] = "Game Moderator", -- giovannirv2
-	[4225513035] = "Game Moderator", -- Waitwhatb40
-	[41482597] = "Game Moderator", -- kerub131
-	[2924549627] = "Game Moderator", -- rashhhh2
-	[2732967856] = "Game Moderator", -- DontTouchZGrass
-	[1937516999] = "Game Moderator", -- matheu09173
-	[1374319325] = "Game Moderator", -- jostjohnyca
-	[1058831985] = "Game Moderator", -- krisidisi23
-	[9621064456] = "Game Moderator", -- MetaSile
-	[584370127] = "Game Moderator", -- 1Newy1
-	[813030262] = "Game Moderator", -- Prye4
-	[3470393585] = "Game Moderator", -- k6ppo
-	[122915793] = "Game Moderator", -- LionTooth99999
-	[1534692727] = "Game Moderator", -- LUKASAJs
-	[7278178099] = "Game Moderator", -- thecarrotman513
-	[8593140875] = "Game Moderator", -- HurbertTheP3r73rt
-	[2525997354] = "Game Moderator", -- BlackWhiteYT11
-	[3126891654] = "Game Moderator", -- v6xzt
-	[1190967808] = "Game Moderator", -- djvdhshscshs
-	[833946684] = "Game Moderator", -- GamerGubbi
-	[202751467] = "Game Moderator", -- lumbers2
-	[510349404] = "Game Moderator", -- Kristian4209
-	[174212818] = "Contribution", -- YTGonzo
-	[25548179] = "Lead Developer", -- AsianAbrex
-	[363101315] = "Lead Developer", -- Warm_Vibes
-	[47983795] = "Co-Founder", -- ChickenBagelz
-	[16681869] = "Founder", -- neddleduck
+	[51281722] = "Game Moderator",
+	[7178750309] = "Game Moderator",
+	[113179883] = "Game Moderator",
+	[3122439095] = "Game Moderator",
+	[991290934] = "Game Moderator",
+	[3968854760] = "Game Moderator",
+	[81993536] = "Game Moderator",
+	[1004214871] = "Game Moderator",
+	[3034930770] = "Game Moderator",
+	[2364950171] = "Game Moderator",
+	[1528346843] = "Game Moderator",
+	[165053216] = "Game Moderator",
+	[1127954045] = "Game Moderator",
+	[3640120679] = "Game Moderator",
+	[602009251] = "Game Moderator",
+	[372791101] = "Game Moderator",
+	[1378169111] = "Game Moderator",
+	[3020799797] = "Game Moderator",
+	[2567998467] = "Game Moderator",
+	[4243907215] = "Game Moderator",
+	[353983652] = "Game Moderator",
+	[1406181681] = "Game Moderator",
+	[2229169589] = "Game Moderator",
+	[3004094651] = "Game Moderator",
+	[839333692] = "Game Moderator",
+	[979624578] = "Game Moderator",
+	[1478885961] = "Game Moderator",
+	[399754916] = "Game Moderator",
+	[1193091081] = "Game Moderator",
+	[4553863490] = "Game Moderator",
+	[4225513035] = "Game Moderator",
+	[41482597] = "Game Moderator",
+	[2924549627] = "Game Moderator",
+	[2732967856] = "Game Moderator",
+	[1937516999] = "Game Moderator",
+	[1374319325] = "Game Moderator",
+	[1058831985] = "Game Moderator",
+	[9621064456] = "Game Moderator",
+	[584370127] = "Game Moderator",
+	[813030262] = "Game Moderator",
+	[3470393585] = "Game Moderator",
+	[122915793] = "Game Moderator",
+	[1534692727] = "Game Moderator",
+	[7278178099] = "Game Moderator",
+	[8593140875] = "Game Moderator",
+	[2525997354] = "Game Moderator",
+	[3126891654] = "Game Moderator",
+	[1190967808] = "Game Moderator",
+	[833946684] = "Game Moderator",
+	[202751467] = "Game Moderator",
+	[510349404] = "Game Moderator",
+	[174212818] = "Contribution",
+	[25548179] = "Lead Developer",
+	[363101315] = "Lead Developer",
+	[47983795] = "Co-Founder",
+	[16681869] = "Founder",
 }
 
-local SoundIds = {
-	["Neverlose"] = 6607204501,
-}
-
+-- helper functions
 local function LoadOffsets()
 	local Success, Response = pcall(function()
 		return game:HttpGet("https://offsets.imtheo.lol/Offsets.json")
 	end)
-
 	if not Success then
 		warn("Failed to grab offsets.")
 		return nil
 	end
-
 	local Decoded = HttpService:JSONDecode(Response)
-
 	if Decoded and Decoded.Offsets then
 		return Decoded.Offsets
 	end
-
 	return nil
 end
 
 local Offsets = LoadOffsets()
-
 if not Offsets then
 	warn("Failed to load offsets.")
 end
 
--- gun mods
 local Cache = getgc({ "RecoilMult", "RangeMult", "SpeedMult", "AimSpreadMult", "HipSpreadMult" })
 
 local function EnableNoRecoil()
 	applygc(Cache, "RecoilMult", -1)
 end
-
 local function DisableNoRecoil()
 	applygc(Cache, "RecoilMult", 1)
 end
-
 local function EnableExtendRange()
 	applygc(Cache, "RangeMult", 10)
 end
-
 local function DisableExtendRange()
 	applygc(Cache, "RangeMult", 1)
 end
-
 local function EnableNoSpread()
 	applygc(Cache, "AimSpreadMult", -1)
 	applygc(Cache, "HipSpreadMult", -1)
 end
-
 local function DisableNoSpread()
 	applygc(Cache, "AimSpreadMult", 1)
 	applygc(Cache, "HipSpreadMult", 1)
 end
--- end of gun mods
 
--- helper functions
 local function ResolveTargetPart(Character, Head, HumanoidRootPart)
 	local Mouse = LocalPlayer:GetMouse()
 	local MousePos = Vector2.new(Mouse.X, Mouse.Y)
@@ -180,20 +192,16 @@ local function ResolveTargetPart(Character, Head, HumanoidRootPart)
 			if not Part:IsA("BasePart") then
 				continue
 			end
-
 			if not Part.Position then
 				continue
 			end
-
 			local PartScreen, PartOnScreen = WorldToScreen(Part.Position)
 			if not PartOnScreen then
 				continue
 			end
-
 			local dx = PartScreen.X - MousePos.X
 			local dy = PartScreen.Y - MousePos.Y
 			local PartDist = math.sqrt(dx * dx + dy * dy)
-
 			if PartDist < ClosestPartDist then
 				ClosestPartDist = PartDist
 				ClosestPart = Part
@@ -214,33 +222,27 @@ local function FindClosestViableTarget()
 	if not LocalChar then
 		return
 	end
-
 	local LocalRoot = LocalChar and LocalChar:FindFirstChild("HumanoidRootPart")
 
 	for _, Player in Players:GetPlayers() do
-		if Player.Name == LocalPlayer.Name then -- if your looking at this i compare names not because its vibe coded but because matcha is shit and comparing 2 players always returns false
+		if Player.Name == LocalPlayer.Name then
 			continue
 		end
-
 		local Char = Player.Character
 		if not Char then
 			continue
 		end
-
 		local Head = Char:FindFirstChild("Head")
 		if not Head then
 			continue
 		end
-
 		local Humanoid = Char:FindFirstChild("Humanoid")
 		if not Humanoid then
 			continue
 		end
-
 		if Humanoid.Health <= 0 then
 			continue
 		end
-
 		local HumanoidRootPart = Char:FindFirstChild("HumanoidRootPart")
 		if not HumanoidRootPart then
 			continue
@@ -253,7 +255,6 @@ local function FindClosestViableTarget()
 			if not Success then
 				continue
 			end
-
 			if Value then
 				continue
 			end
@@ -264,7 +265,6 @@ local function FindClosestViableTarget()
 			continue
 		end
 
-		-- distance check
 		if LocalRoot and (LocalRoot.Position - TargetPart.Position).Magnitude > Flags.AimbotMaxDistance then
 			continue
 		end
@@ -303,7 +303,6 @@ local function GetHeldWeapon(Char)
 	if not Char then
 		return "None"
 	end
-
 	for _, Model in Char:GetChildren() do
 		if not Model:IsA("Model") then
 			continue
@@ -311,7 +310,6 @@ local function GetHeldWeapon(Char)
 		if Model.Name == "Hair" or Model.Name == "HolsterModel" then
 			continue
 		end
-
 		if
 			Model:FindFirstChild("Detail")
 			or Model:FindFirstChild("Main")
@@ -360,206 +358,364 @@ local function IsCheater(Player)
 	if not Player then
 		return false
 	end
-
 	local Success, Age = pcall(function()
 		return memory_read("int", Player.Address + Offsets.Player.AccountAge)
 	end)
-
 	if not Success then
 		warn("Failed to read account age")
 		return false
 	end
-
 	if Age <= 60 then
 		return true
 	end
-
 	local Char = Player.Character
 	if not Char then
 		return false
 	end
-
 	local Hrp = Char:FindFirstChild("HumanoidRootPart")
 	if not Hrp then
 		return false
 	end
-
 	local Velocity = Hrp.Velocity
-
 	if Velocity.Y <= -1000 or Velocity.Y >= 1000 then
 		return true
 	end
-
 	return false
 end
 -- end of helper functions
 
--- keybinds so i can call isenabled later
-local AimbotKeybind
+-- ui
+local Lib
+local URL = "https://raw.githubusercontent.com/neaxusxgod-png/INS-ui/main/uilib.lua"
 
-UI.AddTab("Fallen", function(Tab)
-	-- combat section
-	local Combat = Tab:Section("Combat", "Left", { "Aimbot", "Gun Mods" })
+for i = 1, 10 do
+	local cb = "?cb=" .. tostring((math.floor(tick() * 1000) + i * 7919) % 2000000000)
+	local ok, body = pcall(game.HttpGet, game, URL .. cb)
 
-	if Combat.page == 0 then
-		-- aimbot
-		Combat:Toggle("AimbotOn", "Aimbot", false, function(Bool)
-			Flags.Aimbot = Bool
-		end)
-		AimbotKeybind = Combat:Keybind("AimbotKeybind", Enum.KeyCode.MouseButton2, "hold")
-		AimbotKeybind:AddToHotkey("Aimbot", "AimbotOn")
-		Combat:Toggle("AutoPrediction", "Auto Prediction", false, function(Bool)
-			Flags.AutoPrediction = Bool
-		end)
-		Combat:Tip("Auto Prediction automatically adjusts prediction on velocity and held weapon.")
-		Combat:Combo("TargetPart", "Target Part", { "Head", "Humanoid Root Part", "Closest" }, 0, function(Idx, Text)
-			Flags.AimbotTargetPart = Text
-		end)
-		Combat:SliderInt("AimbotMaxDistance", "Max Distance", 50, 1500, 1000, function(V)
-			Flags.AimbotMaxDistance = V
-		end)
-		Combat:Toggle("SafezoneCheck", "Safezone Check", false, function(Bool)
-			Flags.SafezoneCheck = Bool
-		end)
-		Combat:Toggle("FovCheck", "FOV Check", false, function(Bool)
-			Flags.AimbotFovCheck = Bool
-		end)
-		Combat:SliderInt("FovCheckRadius", "FOV Radius", 10, 250, 50, function(V)
-			Flags.AimbotFovRadius = V
-		end)
-		Combat:Toggle("Snapline", "Snapline", false, function(Bool)
-			Flags.Snapline = Bool
-		end)
-	elseif Combat.page == 1 then
-		-- gun mods
-		Combat:Toggle("NoRecoil", "No Recoil", false, function(Bool)
-			if Bool then
-				EnableNoRecoil()
-			else
-				DisableNoRecoil()
-			end
-		end)
-		Combat:Toggle("ExtendRange", "Extend Range", false, function(Bool)
-			if Bool then
-				EnableExtendRange()
-			else
-				DisableExtendRange()
-			end
-		end)
-		Combat:Toggle("NoSpread", "No Spread", false, function(Bool)
-			if Bool then
-				EnableNoSpread()
-			else
-				DisableNoSpread()
-			end
-		end)
+	if not (ok and type(body) == "string" and #body > 1000 and body:find("INSUI_FILE_END", 1, true)) then
+		task.wait(0.4)
+		continue
 	end
 
-	-- visuals section
-	local Visuals = Tab:Section("Visuals", "Right", { "Player", "AI" })
-
-	if Visuals.page == 0 then
-		Visuals:Toggle("ArmorViewer", "Armor Viewer", false, function(Bool)
-			Flags.ArmorViewer = Bool
-		end)
-		Visuals:Toggle("CheaterDetector", "Cheater Detector", false, function(Bool)
-			Flags.CheaterDetector = Bool
-		end)
-		Visuals:Tip("Detects unusual velocities and new accounts.")
-	elseif Visuals.page == 1 then
-		-- todo later maybe if matcha doesnt piss me off that much
+	local chunk = loadstring(body)
+	if not chunk then
+		task.wait(0.4)
+		continue
 	end
 
-	-- movement section
-	local Movement = Tab:Section("Movement", "Right", { "Movement" })
-	if Movement.page == 0 then
-		Movement:Toggle("BHop", "Bunny Hop", false, function(Bool)
-			Flags.BHop = Bool
-		end)
+	local ok2, res = pcall(chunk)
+
+	if ok2 and type(res) == "table" and type(res.CreateWindow) == "function" then
+		Lib = res
+		break
 	end
 
-	-- misc section
-	local Misc = Tab:Section("Misc", "Left", { "Mod Checker" })
-
-	if Misc.page == 0 then
-		Misc:Toggle("ModChecker", "Mod Checker", false, function(Bool)
-			Flags.ModChecker = Bool
-		end)
-		Misc:Tip("Kick Behavior will crash your roblox!")
-		Misc:Combo("ModCheckerBehavior", "Mod Checker Behavior", { "Notify", "Kick" }, 0, function(Idx, Text)
-			Flags.ModCheckerBehavior = Text
-		end)
+	for _, src in
+		{
+			getgenv,
+			function()
+				return _G
+			end,
+			function()
+				return shared
+			end,
+		}
+	do
+		local env = pcall(src) and src() or {}
+		local candidate = type(env) == "table" and env.INSui
+		if type(candidate) == "table" and type(candidate.CreateWindow) == "function" then
+			Lib = candidate
+			break
+		end
 	end
 
-	-- misc esp section
-	local MiscEsp = Tab:Section("Misc ESP", "Right", { "Loot", "Nodes", "Plants", "Misc" })
+	if Lib then
+		break
+	end
+	task.wait(0.4)
+end
 
-	if MiscEsp.page == 0 then
-		MiscEsp:Toggle("DropsEsp", "Dropped Items", false, function(Bool)
-			Flags.DropsEsp = Bool
-		end)
-		MiscEsp:Toggle("BodybagEsp", "Bodybag", false, function(Bool)
-			Flags.BodybagEsp = Bool
-		end)
-		MiscEsp:SliderInt("LootEspDistance", "Distance", 100, 1500, 500, function(V)
-			Flags.LootEspDistance = V
-		end)
-	elseif MiscEsp.page == 1 then
-		MiscEsp:Toggle("StoneEsp", "Stone ESP", false, function(Bool)
-			Flags.StoneEsp = Bool
-		end)
-		MiscEsp:Toggle("MetalEsp", "Metal ESP", false, function(Bool)
-			Flags.MetalEsp = Bool
-		end)
-		MiscEsp:Toggle("PhosphateEsp", "Phosphate ESP", false, function(Bool)
-			Flags.PhosphateEsp = Bool
-		end)
-		MiscEsp:SliderInt("NodeEspDistance", "Distance", 100, 1500, 500, function(V)
-			Flags.NodeEspDistance = V
-		end)
-	elseif MiscEsp.page == 2 then
-		-- plant shi (only doing wool, tomato, pumpkin, corn)
-		MiscEsp:Toggle("WoolEsp", "Wool ESP", false, function(Bool)
-			Flags.WoolEsp = Bool
-		end)
-		MiscEsp:Toggle("TomatoEsp", "Tomato ESP", false, function(Bool)
-			Flags.TomatoEsp = Bool
-		end)
-		MiscEsp:Toggle("PumpkinEsp", "Pumpkin ESP", false, function(Bool)
-			Flags.PumpkinEsp = Bool
-		end)
-		MiscEsp:Toggle("CornEsp", "Corn ESP", false, function(Bool)
-			Flags.CornEsp = Bool
-		end)
-		MiscEsp:SliderInt("PlantEspDistance", "Distance", 100, 1500, 500, function(V)
-			Flags.PlantEspDistance = V
-		end)
-	elseif MiscEsp.page == 3 then
-		MiscEsp:Toggle("MiniEsp", "Minicopter ESP", false, function(Bool)
-			Flags.MiniEsp = Bool
-		end)
-		MiscEsp:SliderInt("MiniEspDistance", "Minicopter Distance", 100, 1500, 500, function(V)
-			Flags.MiniEspDistance = V
-		end)
-		MiscEsp:Toggle("RaidEsp", "Raid ESP", false, function(Bool)
-			Flags.RaidEsp = Bool
-		end)
-		MiscEsp:SliderInt("RaidEspDistance", "Raid Distance", 500, 5000, 2000, function(V)
-			Flags.RaidEspDistance = V
-		end)
+if type(Lib) ~= "table" then
+	return warn("INS ui failed to load, run again")
+end
+
+local Win = Lib:CreateWindow({
+	title = "Blaze",
+	subtitle = "auto",
+	size = Vector2.new(720, 540),
+	menuKey = "rightshift",
+	configName = "blaze_fallen",
+})
+
+Win:SetTheme({
+	accentA = Color3.fromRGB(255, 85, 20),
+	accentB = Color3.fromRGB(255, 145, 50),
+	bg = Color3.fromRGB(12, 8, 6),
+	sidebar = Color3.fromRGB(18, 10, 8),
+})
+
+Win:AddSettingsTab("cog")
+
+-- combat
+local CombatTab = Win:Tab("Combat", "crosshair")
+
+local AimbotSec = CombatTab:Section("Aimbot", "Left")
+
+local AimbotToggle = AimbotSec:Toggle("Aimbot", false, function(Bool)
+	Flags.Aimbot = Bool
+	if not Bool then
+		Flags.LockedTarget = nil
 	end
 end)
--- end of ui
+
+local AimbotKeybind = AimbotToggle:AddKeybind("MouseButton2", "Hold", function(Bool) end)
+
+AimbotSec:Toggle("Auto Prediction", false, function(Bool)
+	Flags.AutoPrediction = Bool
+end):Tooltip("Automatically adjusts prediction based on velocity and held weapon.")
+
+AimbotSec:Dropdown("Target Part", { "Head" }, { "Head", "Humanoid Root Part", "Closest" }, false, function(v)
+	Flags.AimbotTargetPart = v[1]
+end)
+
+AimbotSec:Slider("Max Distance", 1000, 50, 50, 1500, "m", function(v)
+	Flags.AimbotMaxDistance = v
+end)
+
+AimbotSec:Toggle("Safezone Check", false, function(Bool)
+	Flags.SafezoneCheck = Bool
+end)
+
+local FovToggle = AimbotSec:Toggle("FOV Check", false, function(Bool)
+	Flags.AimbotFovCheck = Bool
+end)
+
+FovToggle:AddColorpicker("FOV Color", Color3.fromRGB(255, 255, 255), function(C, A)
+	Flags.FovColor = C
+	Flags.FovAlpha = A
+end)
+
+AimbotSec:Slider("FOV Radius", 50, 1, 10, 250, "px", function(v)
+	Flags.AimbotFovRadius = v
+end)
+
+local SnaplineToggle = AimbotSec:Toggle("Snapline", false, function(Bool)
+	Flags.Snapline = Bool
+end)
+
+SnaplineToggle:AddColorpicker("Snapline Color", Color3.fromRGB(255, 255, 255), function(C, A)
+	Flags.SnaplineColor = C
+	Flags.SnaplineAlpha = A
+end)
+
+local GunModsSec = CombatTab:Section("Gun Mods", "Right")
+
+GunModsSec:Toggle("No Recoil", false, function(Bool)
+	if Bool then
+		EnableNoRecoil()
+	else
+		DisableNoRecoil()
+	end
+end)
+
+GunModsSec:Toggle("Extend Range", false, function(Bool)
+	if Bool then
+		EnableExtendRange()
+	else
+		DisableExtendRange()
+	end
+end)
+
+GunModsSec:Toggle("No Spread", false, function(Bool)
+	if Bool then
+		EnableNoSpread()
+	else
+		DisableNoSpread()
+	end
+end)
+-- end of combat
+
+-- esp
+local EspTab = Win:Tab("ESP", "eye")
+
+local PlayerVisSec = EspTab:Section("Player", "Left")
+
+PlayerVisSec:Toggle("Armor Viewer", false, function(Bool)
+	Flags.ArmorViewer = Bool
+end)
+
+local CheaterDetectorToggle = PlayerVisSec:Toggle("Cheater Detector", false, function(Bool)
+	Flags.CheaterDetector = Bool
+end):Tooltip("Detects unusual velocities and new accounts.")
+
+CheaterDetectorToggle:AddColorpicker("Cheater Detector Color", Color3.fromRGB(255, 13, 13), function(C, A)
+	Flags.CheaterDetectorColor = C
+	Flags.CheaterDetectorAlpha = A
+end)
+-- end of esp
+
+-- misc esp
+local LootSec = EspTab:Section("Loot", "Left")
+
+local ItemsToggle = LootSec:Toggle("Dropped Items", false, function(Bool)
+	Flags.DropsEsp = Bool
+end)
+
+ItemsToggle:AddColorpicker("Dropped Items Color", Color3.fromRGB(110, 149, 255), function(C, A)
+	Flags.DropsColor = C
+	Flags.DropsAlpha = A
+end)
+
+local BodybagToggle = LootSec:Toggle("Bodybag", false, function(Bool)
+	Flags.BodybagEsp = Bool
+end)
+
+BodybagToggle:AddColorpicker("Bodybag Color", Color3.fromRGB(255, 100, 100), function(C, A)
+	Flags.BodybagColor = C
+	Flags.BodybagAlpha = A
+end)
+
+LootSec:Slider("Loot Distance", 500, 50, 100, 1500, "m", function(v)
+	Flags.LootEspDistance = v
+end)
+
+local NodeSec = EspTab:Section("Nodes", "Right")
+
+local StoneToggle = NodeSec:Toggle("Stone ESP", false, function(Bool)
+	Flags.StoneEsp = Bool
+end)
+
+StoneToggle:AddColorpicker("Stone Node Color", Color3.new(0.5, 0.5, 0.5), function(C, A)
+	Flags.StoneColor = C
+	Flags.StoneAlpha = A
+end)
+
+local MetalToggle = NodeSec:Toggle("Metal ESP", false, function(Bool)
+	Flags.MetalEsp = Bool
+end)
+
+MetalToggle:AddColorpicker("Metal Node Color", Color3.new(1, 0.6, 0.1), function(C, A)
+	Flags.MetalColor = C
+	Flags.MetalAlpha = A
+end)
+
+local PhosphateToggle = NodeSec:Toggle("Phosphate ESP", false, function(Bool)
+	Flags.PhosphateEsp = Bool
+end)
+
+PhosphateToggle:AddColorpicker("Phosphate Node Color", Color3.new(1, 1, 0.5), function(C, A)
+	Flags.PhosphateColor = C
+	Flags.PhosphateAlpha = A
+end)
+
+NodeSec:Slider("Node Distance", 500, 50, 100, 1500, "m", function(v)
+	Flags.NodeEspDistance = v
+end)
+
+local PlantSec = EspTab:Section("Plants", "Left")
+
+local WoolToggle = PlantSec:Toggle("Wool ESP", false, function(Bool)
+	Flags.WoolEsp = Bool
+end)
+
+WoolToggle:AddColorpicker("Wool Color", Color3.new(0.92, 0.92, 0.92), function(C, A)
+	Flags.WoolColor = C
+	Flags.WoolAlpha = A
+end)
+
+local TomatoToggle = PlantSec:Toggle("Tomato ESP", false, function(Bool)
+	Flags.TomatoEsp = Bool
+end)
+
+TomatoToggle:AddColorpicker("Tomato Color", Color3.new(1, 0.18, 0.18), function(C, A)
+	Flags.TomatoColor = C
+	Flags.TomatoAlpha = A
+end)
+
+local PumpkinToggle = PlantSec:Toggle("Pumpkin ESP", false, function(Bool)
+	Flags.PumpkinEsp = Bool
+end)
+
+PumpkinToggle:AddColorpicker("Pumpkin Color", Color3.new(1, 0.62, 0.13), function(C, A)
+	Flags.PumpkinColor = C
+	Flags.PumpkinAlpha = A
+end)
+
+local CornToggle = PlantSec:Toggle("Corn ESP", false, function(Bool)
+	Flags.CornEsp = Bool
+end)
+
+CornToggle:AddColorpicker("Corn Color", Color3.new(1, 1, 0.22), function(C, A)
+	Flags.CornColor = C
+	Flags.CornAlpha = A
+end)
+
+PlantSec:Slider("Plant Distance", 500, 50, 100, 1500, "m", function(v)
+	Flags.PlantEspDistance = v
+end)
+
+local MiscEspSec = EspTab:Section("Misc", "Right")
+
+local MinicopterToggle = MiscEspSec:Toggle("Minicopter ESP", false, function(Bool)
+	Flags.MiniEsp = Bool
+end)
+
+MinicopterToggle:AddColorpicker("Minicopter Color", Color3.fromRGB(24, 66, 255), function(C, A)
+	Flags.MinicopterColor = C
+	Flags.MinicopterAlpha = A
+end)
+
+MiscEspSec:Slider("Minicopter Distance", 500, 50, 100, 1500, "m", function(v)
+	Flags.MiniEspDistance = v
+end)
+
+local RaidToggle = MiscEspSec:Toggle("Raid ESP", false, function(Bool)
+	Flags.RaidEsp = Bool
+end)
+
+RaidToggle:AddColorpicker("Raid Color", Color3.fromRGB(255, 14, 14), function(C, A)
+	Flags.RaidColor = C
+	Flags.RaidAlpha = A
+end)
+
+MiscEspSec:Slider("Raid Distance", 2000, 100, 500, 5000, "m", function(v)
+	Flags.RaidEspDistance = v
+end)
+-- end of misc esp
+
+-- movement
+local MovementTab = Win:Tab("Movement", "user")
+
+local MoveSec = MovementTab:Section("Movement", "Left")
+
+MoveSec:Toggle("Bunny Hop", false, function(Bool)
+	Flags.BHop = Bool
+end)
+-- end of movement
+
+-- misc
+local MiscTab = Win:Tab("Misc", "code")
+
+local ModCheckerSec = MiscTab:Section("Mod Checker", "Left")
+
+ModCheckerSec:Toggle("Mod Checker", false, function(Bool)
+	Flags.ModChecker = Bool
+end)
+
+ModCheckerSec:Dropdown("Mod Checker Behavior", { "Notify" }, { "Notify", "Kick" }, false, function(v)
+	Flags.ModCheckerBehavior = v[1]
+end):Tooltip("Kick Behavior will crash your Roblox!")
+-- end of misc
 
 do
-	RunService.Heartbeat:Connect(function(Dt) -- targetting loop
+	RunService.Heartbeat:Connect(function()
 		local Camera = Workspace.CurrentCamera
 		local Char = LocalPlayer.Character
 		if not Char then
 			return
 		end
 
-		if Flags.Aimbot and AimbotKeybind:IsEnabled() then
+		if Flags.Aimbot and AimbotKeybind:IsActivated() then
 			if not Flags.LockedTarget or not Flags.LockedTarget.Humanoid or Flags.LockedTarget.Humanoid.Health <= 0 then
 				Flags.LockedTarget = FindClosestViableTarget()
 			end
@@ -571,6 +727,7 @@ do
 			local TargetPos = Flags.LockedTarget.TargetPart.Position
 			local HeldWeapon = GetHeldWeapon(Char)
 			local Info = GetBulletInfo(HeldWeapon)
+
 			if not Info or not Flags.AutoPrediction then
 				Camera.lookAt(Camera.Position, Flags.LockedTarget.TargetPart.Position)
 				return
@@ -593,11 +750,12 @@ do
 					Camera.Position
 				)
 			end
+
 			Camera.lookAt(Camera.Position, TargetPos)
 		else
 			Flags.LockedTarget = nil
 		end
-	end) -- end of targetting loop
+	end)
 end
 
 do
@@ -606,44 +764,43 @@ do
 	FovCircle.NumSides = 120
 	local FovCircleOutline = Drawing.new("Circle")
 	FovCircleOutline.Thickness = 1
-	FovCircle.NumSides = FovCircle.NumSides
+	FovCircleOutline.NumSides = 120
 
 	local Snapline = Drawing.new("Line")
 	Snapline.Thickness = 1
 	local SnaplineOutline = Drawing.new("Line")
 	SnaplineOutline.Thickness = 3
 
-	RunService.RenderStepped:Connect(function() -- targetting visuals
+	RunService.RenderStepped:Connect(function()
 		local Mouse = LocalPlayer:GetMouse()
 		local MousePos = Vector2.new(Mouse.X, Mouse.Y)
 
-		if Flags.Aimbot and Flags.AimbotFovCheck then
-			FovCircleOutline.Position = MousePos
-			FovCircleOutline.Radius = Flags.AimbotFovRadius - 1
-			FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
-			FovCircleOutline.Visible = true
-
+		if Flags.AimbotFovCheck then
 			FovCircleOutline.Position = MousePos
 			FovCircleOutline.Radius = Flags.AimbotFovRadius + 1
 			FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
+			FovCircleOutline.Transparency = Flags.FovAlpha
 			FovCircleOutline.Visible = true
 
 			FovCircle.Position = MousePos
 			FovCircle.Radius = Flags.AimbotFovRadius
-			FovCircle.Color = Color3.fromRGB(255, 255, 255)
+			FovCircle.Color = Flags.FovColor
+			FovCircle.Transparency = Flags.FovAlpha
 			FovCircle.ZIndex = 5
 			FovCircle.Outline = true
 			FovCircle.Visible = true
-		elseif not Flags.AimbotFovCheck or not Flags.Aimbot then
+		else
 			FovCircle.Visible = false
 			FovCircleOutline.Visible = false
 		end
-		if Flags.Snapline and Flags.Aimbot and AimbotKeybind:IsEnabled() and Flags.LockedTarget then
+
+		if Flags.Snapline and Flags.Aimbot and AimbotKeybind:IsActivated() and Flags.LockedTarget then
 			local ScreenPos, OnScreen = WorldToScreen(Flags.LockedTarget.TargetPart.Position)
 			if not OnScreen then
+				Snapline.Visible = false
+				SnaplineOutline.Visible = false
 				return
 			end
-
 			Snapline.From = MousePos
 			Snapline.To = ScreenPos
 			Snapline.Color = Color3.fromRGB(255, 255, 255)
@@ -654,7 +811,7 @@ do
 			SnaplineOutline.To = ScreenPos
 			SnaplineOutline.Color = Color3.fromRGB(0, 0, 0)
 			SnaplineOutline.Visible = true
-		elseif Flags.Snapline and not Flags.LockedTarget then
+		else
 			Snapline.Visible = false
 			SnaplineOutline.Visible = false
 		end
@@ -662,20 +819,17 @@ do
 end
 
 do
-	-- armor viewer vars
 	local BoxCount = 8
-	local BoxSize = 64 -- width and height of each box
-	local BoxSpacing = 5 -- gap between boxes
-	local TopMargin = 55 -- distance from top of screen
+	local BoxSize = 64
+	local BoxSpacing = 5
+	local TopMargin = 55
 	local BoxRounding = 10
-	local BgColor = Color3.fromRGB(71, 71, 71) -- remember to do 0.45 transparency cus no color4 (fuck matcha)
+	local BgColor = Color3.fromRGB(71, 71, 71)
 	local BgTransparency = 0.75
 
-	-- image cache
 	local ImageCache = {}
 	local ImageBaseUrl = "https://raw.githubusercontent.com/sigma4skin/matcha-fallen/main/armor_images/"
 
-	-- cheaters cache
 	local Cheaters = {}
 	local CheaterLabels = {}
 
@@ -726,56 +880,44 @@ do
 		end
 	end
 
-	-- caching helper functions for armor viewer
 	local function GetImage(ArmorId)
 		if not ArmorId then
 			return nil
 		end
-
 		local Cached = ImageCache[ArmorId]
 		if Cached ~= nil then
 			return Cached or nil
 		end
-
 		ImageCache[ArmorId] = false
-
-		-- fetch from github
 		local Url = ImageBaseUrl .. ArmorId .. ".png"
 		task.spawn(function()
 			local Ok, Data = pcall(function()
 				return game:HttpGet(Url)
 			end)
-
 			if not Ok or not Data then
 				ImageCache[ArmorId] = false
 				warn("Failed to load image for ", ArmorId)
 				return
 			end
-
 			ImageCache[ArmorId] = Data
 		end)
-
 		return nil
 	end
 
-	-- caching shit
 	local SlotCache = {}
-	local SlotCacheTargetChar = nil
+	local ArmorViewerTargetChar = nil
 
 	local function RebuildSlotCache(Char)
 		SlotCache = {}
 		if not Char then
 			return
 		end
-
 		local Seen = {}
 		local Idx = 1
-
 		for _, Child in Char:GetChildren() do
 			if Idx > BoxCount then
 				break
 			end
-
 			local ArmorId = Child.Name:match("^Armor_%d+")
 			if ArmorId and not Seen[ArmorId] then
 				Seen[ArmorId] = true
@@ -786,7 +928,7 @@ do
 	end
 
 	local function UpdateSlotCacheImages()
-		for I, Slot in SlotCache do
+		for _, Slot in SlotCache do
 			if Slot and not Slot.Icon then
 				local Img = ImageCache[Slot.ArmorId]
 				if Img then
@@ -796,36 +938,27 @@ do
 		end
 	end
 
-	-- throttled cache refresh vars (cheater detector)
 	local CheaterDetectorLastUpdate = 0
 	local CHEATER_DETECTOR_INTERVAL = 3
-	
-	-- throttled cache refresh vars (armor viewer)
 	local ArmorViewerLastUpdate = 0
 	local ARMOR_VIEWER_INTERVAL = 2
-	local ArmorViewerTargetChar = nil
 
-	RunService.RenderStepped:Connect(function() -- visuals loop
+	RunService.RenderStepped:Connect(function()
 		local Camera = Workspace.CurrentCamera
 		if not Camera then
 			HideAllSlots()
 			return
 		end
-
 		local Viewport = Camera.ViewportSize
 		local Now = tick()
 
-		-- armor viewer
 		if Flags.ArmorViewer and Flags.LockedTarget then
 			local TargetChar = Flags.LockedTarget.Character
-
-			-- rebuild cache if target changed or interval elapsed
 			if TargetChar ~= ArmorViewerTargetChar or Now - ArmorViewerLastUpdate >= ARMOR_VIEWER_INTERVAL then
 				ArmorViewerLastUpdate = Now
 				ArmorViewerTargetChar = TargetChar
 				RebuildSlotCache(TargetChar)
 			end
-
 			UpdateSlotCacheImages()
 
 			local TotalWidth = BoxCount * BoxSize + (BoxCount - 1) * BoxSpacing
@@ -836,7 +969,6 @@ do
 				local Slot = SlotCache[I]
 				local Draw = SlotDrawings[I]
 				local X = StartX + (I - 1) * (BoxSize + BoxSpacing)
-
 				Draw.Bg.Position = Vector2.new(X, Y)
 				Draw.Bg.Size = Vector2.new(BoxSize, BoxSize)
 				Draw.Bg.Visible = true
@@ -855,7 +987,6 @@ do
 				end
 			end
 		else
-			-- clear cache vars when disabled or no target
 			if ArmorViewerTargetChar ~= nil then
 				ArmorViewerTargetChar = nil
 				SlotCache = {}
@@ -863,7 +994,6 @@ do
 			HideAllSlots()
 		end
 
-		-- cheater detector cache update
 		if Flags.CheaterDetector and Now - CheaterDetectorLastUpdate >= CHEATER_DETECTOR_INTERVAL then
 			CheaterDetectorLastUpdate = Now
 			for _, Player in Players:GetPlayers() do
@@ -876,10 +1006,8 @@ do
 			end
 		end
 
-		-- cheater detector
 		if Flags.CheaterDetector then
 			local LabelIndex = 0
-
 			for _, Player in Players:GetPlayers() do
 				if not Player or Player.Name == LocalPlayer.Name then
 					continue
@@ -887,7 +1015,6 @@ do
 				if not Cheaters[Player.Name] then
 					continue
 				end
-
 				local Char = Player.Character
 				if not Char then
 					continue
@@ -903,18 +1030,15 @@ do
 				if Humanoid.Health <= 0 then
 					continue
 				end
-
 				local ScreenPos, OnScreen = WorldToScreen(Head.Position + Vector3.new(0, 2.5, 0))
 				if not OnScreen then
 					continue
 				end
-
 				LabelIndex += 1
 				local Label = GetOrCreateLabel(LabelIndex)
 				Label.Position = Vector2.new(ScreenPos.X, ScreenPos.Y)
 				Label.Visible = true
 			end
-
 			for I = LabelIndex + 1, #CheaterLabels do
 				CheaterLabels[I].Visible = false
 			end
@@ -922,24 +1046,23 @@ do
 			HideAllCheaterLabels()
 			Cheaters = {}
 		end
-	end) -- end of visuals loop
+	end)
 end
 
 do
-	RunService.Heartbeat:Connect(function(Dt) -- movement loop
+	RunService.Heartbeat:Connect(function()
 		local Char = LocalPlayer.Character
 		local Humanoid = Char and Char:FindFirstChild("Humanoid")
 
-		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792 -- number for air
+		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792
 
 		if Flags.BHop and not InAir and iskeypressed(32) and isrbxactive() then
 			memory_write("byte", Humanoid.Address + Offsets.Humanoid.Jump, 1)
 		end
-	end) -- end of movement loop
+	end)
 end
 
 do
-	-- general text esp pool
 	local EspPool = {}
 
 	local function GetOrCreateEspLabel(Index)
@@ -963,14 +1086,12 @@ do
 		end
 	end
 
-	-- each esp source returns a list of { Position, Text, Color, MaxDistance } entries
 	local function GetDropEntries()
 		local Entries = {}
 		local Drops = workspace:FindFirstChild("Drops")
 		if not Drops then
 			return Entries
 		end
-
 		for _, Item in Drops:GetChildren() do
 			if not Item:IsA("Model") then
 				continue
@@ -988,11 +1109,11 @@ do
 			table.insert(Entries, {
 				Position = Pos,
 				Text = Item.Name,
-				Color = Color3.fromRGB(110, 149, 255),
+				Color = Flags.DropsColor,
+				Alpha = Flags.DropsAlpha,
 				MaxDistance = Flags.LootEspDistance,
 			})
 		end
-
 		return Entries
 	end
 
@@ -1002,7 +1123,6 @@ do
 		if not Bodybags then
 			return Entries
 		end
-
 		for _, Bag in Bodybags:GetChildren() do
 			if not Bag:IsA("Model") then
 				continue
@@ -1014,11 +1134,11 @@ do
 			table.insert(Entries, {
 				Position = Main.Position + Vector3.new(0, 1, 0),
 				Text = "Bodybag",
-				Color = Color3.fromRGB(255, 100, 100),
+				Color = Flags.BodybagColor,
+				Alpha = Flags.BodybagAlpha,
 				MaxDistance = Flags.LootEspDistance,
 			})
 		end
-
 		return Entries
 	end
 
@@ -1028,7 +1148,6 @@ do
 		if not Nodes then
 			return Entries
 		end
-
 		for _, Node in Nodes:GetChildren() do
 			if not Node:IsA("Model") then
 				continue
@@ -1037,31 +1156,32 @@ do
 			if not BasePart then
 				continue
 			end
-
 			if Flags.StoneEsp and Node.Name == "Stone_Node" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Stone Node",
-					Color = Color3.new(0.5, 0.5, 0.5),
+					Color = Flags.StoneColor,
+					Alpha = Flags.StoneAlpha,
 					MaxDistance = Flags.NodeEspDistance,
 				})
 			elseif Flags.MetalEsp and Node.Name == "Metal_Node" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Metal Node",
-					Color = Color3.new(1, 0.6, 0.1),
+					Color = Flags.MetalColor,
+					Alpha = Flags.MetalAlpha,
 					MaxDistance = Flags.NodeEspDistance,
 				})
 			elseif Flags.PhosphateEsp and Node.Name == "Phosphate_Node" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Phosphate Node",
-					Color = Color3.new(1, 1, 0.5),
+					Color = Flags.PhosphateColor,
+					Alpha = Flags.PhosphateAlpha,
 					MaxDistance = Flags.NodeEspDistance,
 				})
 			end
 		end
-
 		return Entries
 	end
 
@@ -1071,7 +1191,6 @@ do
 		if not Plants then
 			return Entries
 		end
-
 		for _, Plant in Plants:GetChildren() do
 			if not Plant:IsA("Model") then
 				continue
@@ -1080,38 +1199,40 @@ do
 			if not BasePart then
 				continue
 			end
-
 			if Flags.WoolEsp and Plant.Name == "Wool Plant" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Wool",
-					Color = Color3.new(0.925490, 0.925490, 0.925490),
+					Color = Flags.WoolColor,
+					Alpha = Flags.WoolAlpha,
 					MaxDistance = Flags.PlantEspDistance,
 				})
 			elseif Flags.TomatoEsp and Plant.Name == "Tomato Plant" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Tomato",
-					Color = Color3.new(1, 0.188235, 0.188235),
+					Color = Flags.TomatoColor,
+					Alpha = Flags.TomatoAlpha,
 					MaxDistance = Flags.PlantEspDistance,
 				})
 			elseif Flags.PumpkinEsp and Plant.Name == "Pumpkin Plant" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Pumpkin",
-					Color = Color3.new(1, 0.627450, 0.137254),
+					Color = Flags.PumpkinColor,
+					Alpha = Flags.PumpkinAlpha,
 					MaxDistance = Flags.PlantEspDistance,
 				})
 			elseif Flags.CornEsp and Plant.Name == "Corn Plant" then
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Corn",
-					Color = Color3.new(1, 1, 0.219607),
+					Color = Flags.CornColor,
+					Alpha = Flags.CornAlpha,
 					MaxDistance = Flags.PlantEspDistance,
 				})
 			end
 		end
-
 		return Entries
 	end
 
@@ -1121,7 +1242,6 @@ do
 		if not Minis then
 			return Entries
 		end
-
 		for _, Mini in Minis:GetChildren() do
 			if not Mini:IsA("Model") then
 				continue
@@ -1133,15 +1253,14 @@ do
 			table.insert(Entries, {
 				Position = BasePart.Position + Vector3.new(0, 1, 0),
 				Text = "Minicopter",
-				Color = Color3.fromRGB(24, 66, 255),
+				Color = Flags.MinicopterColor,
+				Alpha = Flags.MinicopterAlpha,
 				MaxDistance = Flags.MiniEspDistance,
 			})
 		end
-
 		return Entries
 	end
 
-	-- raid esp
 	local RaidCache = {}
 	local RAID_EXPIRE_TIME = 30
 
@@ -1160,31 +1279,25 @@ do
 			return
 		end
 		local Now = tick()
-
 		for _, Item in VFX:GetChildren() do
 			if not Item.Name:find("Explosion") then
 				continue
 			end
-
 			local BasePart
 			if Item:IsA("BasePart") then
 				BasePart = Item
 			elseif Item:IsA("Model") then
 				BasePart = Item.PrimaryPart or Item:FindFirstChildWhichIsA("BasePart")
 			end
-
 			if not BasePart then
 				continue
 			end
-
 			local Ok, Pos = pcall(function()
 				return BasePart.Position
 			end)
-
 			if not Ok or not Pos then
 				continue
 			end
-
 			local AlreadyCached = false
 			for _, Cached in RaidCache do
 				if Cached.Position and (Cached.Position - Pos).Magnitude < 20 then
@@ -1193,7 +1306,6 @@ do
 					break
 				end
 			end
-
 			if not AlreadyCached then
 				table.insert(RaidCache, { Position = Pos, Time = Now })
 			end
@@ -1205,65 +1317,56 @@ do
 		CleanRaidCache()
 		UpdateRaidCache()
 		local Now = tick()
-
 		for _, Cached in RaidCache do
 			local TimeLeft = math.ceil(RAID_EXPIRE_TIME - (Now - Cached.Time))
 			table.insert(Entries, {
 				Position = Cached.Position + Vector3.new(0, 1, 0),
 				Text = "Raid (" .. TimeLeft .. "s)",
-				Color = Color3.fromRGB(255, 14, 14),
+				Color = Flags.RaidColor,
+				Alpha = Flags.RaidAlpha,
 				MaxDistance = Flags.RaidEspDistance,
 			})
 		end
-
 		return Entries
 	end
-	-- end of raid esp
 
 	local EspCache = {}
 	local EspCacheLastUpdate = 0
 	local ESP_CACHE_INTERVAL = 2
-
 	local EspDrawLastUpdate = 0
 	local ESP_DRAW_INTERVAL = 0.015
 
 	local function RebuildEspCache()
 		local NewCache = {}
-
 		if Flags.DropsEsp then
-			for _, Entry in GetDropEntries() do
-				table.insert(NewCache, Entry)
+			for _, E in GetDropEntries() do
+				table.insert(NewCache, E)
 			end
 		end
-
 		if Flags.BodybagEsp then
-			for _, Entry in GetBodybagEntries() do
-				table.insert(NewCache, Entry)
+			for _, E in GetBodybagEntries() do
+				table.insert(NewCache, E)
 			end
 		end
-
 		if Flags.StoneEsp or Flags.MetalEsp or Flags.PhosphateEsp then
-			for _, Entry in GetNodeEntries() do
-				table.insert(NewCache, Entry)
+			for _, E in GetNodeEntries() do
+				table.insert(NewCache, E)
 			end
 		end
-
 		if Flags.WoolEsp or Flags.TomatoEsp or Flags.PumpkinEsp or Flags.CornEsp then
-			for _, Entry in GetPlantEntries() do
-				table.insert(NewCache, Entry)
+			for _, E in GetPlantEntries() do
+				table.insert(NewCache, E)
 			end
 		end
-
 		if Flags.MiniEsp then
-			for _, Entry in GetMiniEntries() do
-				table.insert(NewCache, Entry)
+			for _, E in GetMiniEntries() do
+				table.insert(NewCache, E)
 			end
 		end
-
 		EspCache = NewCache
 	end
 
-	RunService.RenderStepped:Connect(function() -- misc esp loop
+	RunService.RenderStepped:Connect(function()
 		local Now = tick()
 		local Char = LocalPlayer.Character
 		local Root = Char and Char:FindFirstChild("HumanoidRootPart")
@@ -1286,45 +1389,41 @@ do
 			return
 		end
 
-		-- slow workspace rescan
 		if Now - EspCacheLastUpdate >= ESP_CACHE_INTERVAL then
 			EspCacheLastUpdate = Now
 			task.spawn(RebuildEspCache)
 		end
 
-		-- fast draw
 		if Now - EspDrawLastUpdate < ESP_DRAW_INTERVAL then
 			return
 		end
 		EspDrawLastUpdate = Now
 
 		local AllEntries = {}
-		for _, Entry in EspCache do
-			table.insert(AllEntries, Entry)
+		for _, E in EspCache do
+			table.insert(AllEntries, E)
 		end
 		if Flags.RaidEsp then
-			for _, Entry in GetRaidEntries() do
-				table.insert(AllEntries, Entry)
+			for _, E in GetRaidEntries() do
+				table.insert(AllEntries, E)
 			end
 		end
 
 		local LabelIndex = 0
-
 		for _, Entry in AllEntries do
 			local Dist = Root and (Root.Position - Entry.Position).Magnitude
 			if Dist and Dist > Entry.MaxDistance then
 				continue
 			end
-
 			local ScreenPos, OnScreen = WorldToScreen(Entry.Position)
 			if not OnScreen then
 				continue
 			end
-
 			LabelIndex += 1
 			local Label = GetOrCreateEspLabel(LabelIndex)
 			Label.Text = Entry.Text .. " (" .. math.floor(Dist) .. "m)"
 			Label.Color = Entry.Color
+			Label.Transparency = Entry.Alpha
 			Label.Position = Vector2.new(ScreenPos.X, ScreenPos.Y)
 			Label.Visible = true
 		end
@@ -1334,7 +1433,7 @@ do
 				EspPool[I].Visible = false
 			end
 		end
-	end) -- end of misc esp loop
+	end)
 end
 
 do
@@ -1342,9 +1441,8 @@ do
 	local MOD_CHECKER_INTERVAL = 3
 	local SeenMods = {}
 
-	RunService.Heartbeat:Connect(function(Dt) -- misc loop
+	RunService.Heartbeat:Connect(function()
 		local Now = tick()
-
 		if Flags.ModChecker then
 			if Now - ModCheckerLastCheck >= MOD_CHECKER_INTERVAL then
 				ModCheckerLastCheck = Now
@@ -1352,21 +1450,22 @@ do
 					if not Player or Player.Name == LocalPlayer.Name then
 						continue
 					end
-
 					local Success, UserId = pcall(function()
 						return memory_read("uintptr_t", Player.Address + Offsets.Player.UserId)
 					end)
-
 					if not Success then
 						warn("fuck failed to load userid for mod checker")
 					end
-
 					if not ModeratorIDs[UserId] or SeenMods[UserId] then
 						continue
 					end
-
 					if Flags.ModCheckerBehavior == "Notify" then
-						notify(ModeratorIDs[UserId] .. " (" .. Player.Name .. ") joined your game!", "Blaze", 5)
+						Lib:Notify(
+							"Mod Checker",
+							ModeratorIDs[UserId] .. " (" .. Player.Name .. ") joined your game!",
+							5,
+							"warning"
+						)
 						SeenMods[UserId] = true
 					elseif Flags.ModCheckerBehavior == "Kick" then
 						memory_write("string", game.Workspace.Address, "BLAH")
