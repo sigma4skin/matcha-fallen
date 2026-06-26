@@ -448,10 +448,10 @@ local Win = Lib:CreateWindow({
 })
 
 Win:SetTheme({
-	accentA = Color3.fromRGB(255, 85, 20),
-	accentB = Color3.fromRGB(255, 145, 50),
-	bg = Color3.fromRGB(12, 8, 6),
-	sidebar = Color3.fromRGB(18, 10, 8),
+	accentA = Color3.fromRGB(0, 217, 192),
+	accentB = Color3.fromRGB(0, 168, 232),
+	bg = Color3.fromRGB(6, 14, 20),
+	sidebar = Color3.fromRGB(10, 22, 30),
 })
 
 Win:AddSettingsTab("cog")
