@@ -225,9 +225,11 @@ local function FindClosestViableTarget()
 	local LocalRoot = LocalChar and LocalChar:FindFirstChild("HumanoidRootPart")
 
 	for _, Player in Players:GetPlayers() do
+		--[[
 		if Player.Name == LocalPlayer.Name then
 			continue
 		end
+		--]]
 		local Char = Player.Character
 		if not Char then
 			continue
@@ -444,7 +446,12 @@ local Win = Lib:CreateWindow({
 	subtitle = "auto",
 	size = Vector2.new(720, 540),
 	menuKey = "rightshift",
-	configName = "blaze_fallen",
+	configFolder = "divineland",
+	configName = "default",
+	opacity = 1,
+	gameInput = false,
+	autoSave = true,
+	startOpen = true,
 })
 
 Win:SetTheme({
@@ -468,7 +475,9 @@ local AimbotToggle = AimbotSec:Toggle("Aimbot", false, function(Bool)
 	end
 end)
 
-local AimbotKeybind = AimbotToggle:AddKeybind("MouseButton2", "Hold", function(Bool) end)
+AimbotToggle:AddKeybind("MouseButton2", "Hold", function(Bool)
+	Flags.AimbotActive = Bool
+end)
 
 AimbotSec:Toggle("Auto Prediction", false, function(Bool)
 	Flags.AutoPrediction = Bool
@@ -715,7 +724,7 @@ do
 			return
 		end
 
-		if Flags.Aimbot and AimbotKeybind:IsActivated() then
+		if Flags.Aimbot and Flags.AimbotActive then
 			if not Flags.LockedTarget or not Flags.LockedTarget.Humanoid or Flags.LockedTarget.Humanoid.Health <= 0 then
 				Flags.LockedTarget = FindClosestViableTarget()
 			end
@@ -794,7 +803,7 @@ do
 			FovCircleOutline.Visible = false
 		end
 
-		if Flags.Snapline and Flags.Aimbot and AimbotKeybind:IsActivated() and Flags.LockedTarget then
+		if Flags.Snapline and Flags.Aimbot and Flags.AimbotActive and Flags.LockedTarget then
 			local ScreenPos, OnScreen = WorldToScreen(Flags.LockedTarget.TargetPart.Position)
 			if not OnScreen then
 				Snapline.Visible = false
