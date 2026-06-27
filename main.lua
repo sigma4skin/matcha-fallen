@@ -225,11 +225,9 @@ local function FindClosestViableTarget()
 	local LocalRoot = LocalChar and LocalChar:FindFirstChild("HumanoidRootPart")
 
 	for _, Player in Players:GetPlayers() do
-		--[[
 		if Player.Name == LocalPlayer.Name then
 			continue
 		end
-		--]]
 		local Char = Player.Character
 		if not Char then
 			continue
