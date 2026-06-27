@@ -440,7 +440,7 @@ if type(Lib) ~= "table" then
 end
 
 local Win = Lib:CreateWindow({
-	title = "Blaze",
+	title = "Divine.land",
 	subtitle = "auto",
 	size = Vector2.new(720, 540),
 	menuKey = "rightshift",
@@ -713,6 +713,7 @@ ModCheckerSec:Dropdown("Mod Checker Behavior", { "Notify" }, { "Notify", "Kick" 
 	Flags.ModCheckerBehavior = v[1]
 end):Tooltip("Kick Behavior will crash your Roblox!")
 -- end of misc
+-- end of ui
 
 do
 	RunService.Heartbeat:Connect(function()
