@@ -2490,7 +2490,6 @@ if task and task.spawn then
     end)
 end
 
-getgenv().UI = Menu
 _G.UI = Menu
 return Menu
 
