@@ -2490,8 +2490,8 @@ if task and task.spawn then
     end)
 end
 
-getgenv().INSUI = InsUi
-_G.INSUI = InsUi
+getgenv().UI = Menu
+_G.UI = Menu
 return Menu
 
 end)();
