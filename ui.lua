@@ -2490,8 +2490,7 @@ if task and task.spawn then
     end)
 end
 
+_G.UI = Menu
 return Menu
 
 end)();
-_G.UI = Menu
-return Menu
