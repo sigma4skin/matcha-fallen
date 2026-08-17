@@ -2490,6 +2490,8 @@ if task and task.spawn then
     end)
 end
 
+getgenv().INSUI = InsUi
+_G.INSUI = InsUi
 return Menu
 
 end)();
