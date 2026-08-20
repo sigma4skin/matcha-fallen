@@ -47,6 +47,20 @@ Flags.RaidAlpha = 1
 Flags.BulletThickness = 1
 Flags.FireRateMult = 1
 
+local FovCheckRow, SnaplineRow, CheaterDetectorRow
+local DropsRow, BodybagRow, WoolRow, TomatoRow, PumpkinRow, CornRow
+local StoneRow, MetalRow, PhosphateRow, MiniRow, RaidRow
+
+local function FetchRowColor(Row, DefaultColor)
+    if Row and Row.GetColor then
+        local Color, Alpha = Row:GetColor()
+        if Color then
+            return Color, 1 - (Alpha or 0)
+        end
+    end
+    return DefaultColor, 1
+end
+
 local BulletInfo = {
     ["Pumpkin Launcher"] = { Speed = 80, Gravity = 0.16 },
     ["Military M4A1"] = { Speed = 2100, Gravity = 0.55 },
@@ -426,7 +440,7 @@ do
     local Right = Combat:Panel({ Side = "right", Tabs = { "Gun Mods" } })
 
     local Aim = Left:Page("Aimbot")
-    Aim:Toggle({ Name = "Aimbot", Key = "m2",
+    Aim:Toggle({ Name = "Aimbot", Key = "m2", Help = "Master switch for the aimbot",
         Callback = function(Bool)
             Flags.Aimbot = Bool
         end })
@@ -448,7 +462,7 @@ do
         Callback = function(Bool)
             Flags.SafezoneCheck = Bool
         end })
-    Aim:Toggle({ Name = "FOV Check", Color = White,
+    FovCheckRow = Aim:Toggle({ Name = "FOV Check", Color = White,
         Callback = function(Bool)
             Flags.AimbotFovCheck = Bool
         end })
@@ -456,7 +470,7 @@ do
         Callback = function(V)
             Flags.AimbotFovRadius = V
         end })
-    Aim:Toggle({ Name = "Snapline", Color = White,
+    SnaplineRow = Aim:Toggle({ Name = "Snapline", Color = White,
         Callback = function(Bool)
             Flags.Snapline = Bool
         end })
@@ -507,23 +521,23 @@ do
     local Left = Esp:Panel({ Side = "left", Tabs = { "Player", "Loot", "Plants" } })
     local Right = Esp:Panel({ Side = "right", Tabs = { "Nodes", "Misc" } })
 
-    local Players = Left:Page("Player")
-    Players:Toggle({ Name = "Armor Viewer",
+    local PlayersPage = Left:Page("Player")
+    PlayersPage:Toggle({ Name = "Armor Viewer",
         Callback = function(Bool)
             Flags.ArmorViewer = Bool
         end })
-    Players:Toggle({ Name = "Cheater Detector", Color = C(255, 13, 13),
+    CheaterDetectorRow = PlayersPage:Toggle({ Name = "Cheater Detector", Color = C(255, 13, 13),
         Help = "Detects unusual velocities and new accounts.",
         Callback = function(Bool)
             Flags.CheaterDetector = Bool
         end })
 
     local Loot = Left:Page("Loot")
-    Loot:Toggle({ Name = "Dropped Items", Color = C(110, 149, 255),
+    DropsRow = Loot:Toggle({ Name = "Dropped Items", Color = C(110, 149, 255),
         Callback = function(Bool)
             Flags.DropsEsp = Bool
         end })
-    Loot:Toggle({ Name = "Bodybag", Color = C(255, 100, 100),
+    BodybagRow = Loot:Toggle({ Name = "Bodybag", Color = C(255, 100, 100),
         Callback = function(Bool)
             Flags.BodybagEsp = Bool
         end })
@@ -533,19 +547,19 @@ do
         end })
 
     local Plants = Left:Page("Plants")
-    Plants:Toggle({ Name = "Wool ESP", Color = C(235, 235, 235),
+    WoolRow = Plants:Toggle({ Name = "Wool ESP", Color = C(235, 235, 235),
         Callback = function(Bool)
             Flags.WoolEsp = Bool
         end })
-    Plants:Toggle({ Name = "Tomato ESP", Color = C(255, 46, 46),
+    TomatoRow = Plants:Toggle({ Name = "Tomato ESP", Color = C(255, 46, 46),
         Callback = function(Bool)
             Flags.TomatoEsp = Bool
         end })
-    Plants:Toggle({ Name = "Pumpkin ESP", Color = C(255, 158, 33),
+    PumpkinRow = Plants:Toggle({ Name = "Pumpkin ESP", Color = C(255, 158, 33),
         Callback = function(Bool)
             Flags.PumpkinEsp = Bool
         end })
-    Plants:Toggle({ Name = "Corn ESP", Color = C(255, 255, 56),
+    CornRow = Plants:Toggle({ Name = "Corn ESP", Color = C(255, 255, 56),
         Callback = function(Bool)
             Flags.CornEsp = Bool
         end })
@@ -555,15 +569,15 @@ do
         end })
 
     local Nodes = Right:Page("Nodes")
-    Nodes:Toggle({ Name = "Stone ESP", Color = C(128, 128, 128),
+    StoneRow = Nodes:Toggle({ Name = "Stone ESP", Color = C(128, 128, 128),
         Callback = function(Bool)
             Flags.StoneEsp = Bool
         end })
-    Nodes:Toggle({ Name = "Metal ESP", Color = C(255, 153, 26),
+    MetalRow = Nodes:Toggle({ Name = "Metal ESP", Color = C(255, 153, 26),
         Callback = function(Bool)
             Flags.MetalEsp = Bool
         end })
-    Nodes:Toggle({ Name = "Phosphate ESP", Color = C(255, 255, 128),
+    PhosphateRow = Nodes:Toggle({ Name = "Phosphate ESP", Color = C(255, 255, 128),
         Callback = function(Bool)
             Flags.PhosphateEsp = Bool
         end })
@@ -573,7 +587,7 @@ do
         end })
 
     local MiscEsp = Right:Page("Misc")
-    MiscEsp:Toggle({ Name = "Minicopter ESP", Color = C(24, 66, 255),
+    MiniRow = MiscEsp:Toggle({ Name = "Minicopter ESP", Color = C(24, 66, 255),
         Callback = function(Bool)
             Flags.MiniEsp = Bool
         end })
@@ -581,7 +595,7 @@ do
         Callback = function(V)
             Flags.MiniEspDistance = V
         end })
-    MiscEsp:Toggle({ Name = "Raid ESP", Color = C(255, 14, 14),
+    RaidRow = MiscEsp:Toggle({ Name = "Raid ESP", Color = C(255, 14, 14),
         Callback = function(Bool)
             Flags.RaidEsp = Bool
         end })
@@ -894,16 +908,17 @@ do -- targetting
             local MousePos = Vector2.new(Mouse.X, Mouse.Y)
 
             if Flags.AimbotFovCheck then
+                local color, alpha = FetchRowColor(FovCheckRow, Flags.FovColor)
                 FovCircleOutline.Position = MousePos
                 FovCircleOutline.Radius = Flags.AimbotFovRadius
                 FovCircleOutline.Color = Color3.fromRGB(0, 0, 0)
-                FovCircleOutline.Transparency = Flags.FovAlpha
+                FovCircleOutline.Transparency = alpha
                 FovCircleOutline.Visible = true
 
                 FovCircle.Position = MousePos
                 FovCircle.Radius = Flags.AimbotFovRadius
-                FovCircle.Color = Flags.FovColor
-                FovCircle.Transparency = Flags.FovAlpha
+                FovCircle.Color = color
+                FovCircle.Transparency = alpha
                 FovCircle.ZIndex = 5
                 FovCircle.Outline = true
                 FovCircle.Visible = true
@@ -919,15 +934,18 @@ do -- targetting
                     SnaplineOutline.Visible = false
                     return
                 end
+                local color, alpha = FetchRowColor(SnaplineRow, Flags.SnaplineColor)
                 Snapline.From = MousePos
                 Snapline.To = ScreenPos
-                Snapline.Color = Color3.fromRGB(255, 255, 255)
+                Snapline.Color = color
+                Snapline.Transparency = alpha
                 Snapline.ZIndex = 5
                 Snapline.Visible = true
 
                 SnaplineOutline.From = MousePos
                 SnaplineOutline.To = ScreenPos
                 SnaplineOutline.Color = Color3.fromRGB(0, 0, 0)
+                SnaplineOutline.Transparency = alpha
                 SnaplineOutline.Visible = true
             else
                 Snapline.Visible = false
@@ -1045,6 +1063,7 @@ do
                 end
             end
 
+            local color, alpha = FetchRowColor(CheaterDetectorRow, Flags.CheaterDetectorColor)
             local LabelIndex = 0
             for _, Player in Players:GetPlayers() do
                 if not Player or Player == LocalPlayer then
@@ -1074,6 +1093,8 @@ do
                 end
                 LabelIndex += 1
                 local Label = GetOrCreateLabel(LabelIndex)
+                Label.Color = color
+                Label.Transparency = alpha
                 Label.Position = Vector2.new(ScreenPos.X, ScreenPos.Y)
                 Label.Visible = true
             end
@@ -1130,6 +1151,7 @@ do
         if not Drops then
             return Entries
         end
+        local color, alpha = FetchRowColor(DropsRow, Flags.DropsColor)
         for _, Item in Drops:GetChildren() do
             if not Item:IsA("Model") then
                 continue
@@ -1147,8 +1169,8 @@ do
             table.insert(Entries, {
                 Position = Pos,
                 Text = Item.Name,
-                Color = Flags.DropsColor,
-                Alpha = Flags.DropsAlpha,
+                Color = color,
+                Alpha = alpha,
                 MaxDistance = Flags.LootEspDistance,
             })
         end
@@ -1161,6 +1183,7 @@ do
         if not Bodybags then
             return Entries
         end
+        local color, alpha = FetchRowColor(BodybagRow, Flags.BodybagColor)
         for _, Bag in Bodybags:GetChildren() do
             if not Bag:IsA("Model") then
                 continue
@@ -1172,8 +1195,8 @@ do
             table.insert(Entries, {
                 Position = Main.Position + Vector3.new(0, 1, 0),
                 Text = "Bodybag",
-                Color = Flags.BodybagColor,
-                Alpha = Flags.BodybagAlpha,
+                Color = color,
+                Alpha = alpha,
                 MaxDistance = Flags.LootEspDistance,
             })
         end
@@ -1195,27 +1218,30 @@ do
                 continue
             end
             if Flags.StoneEsp and Node.Name == "Stone_Node" then
+                local color, alpha = FetchRowColor(StoneRow, Flags.StoneColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Stone Node",
-                    Color = Flags.StoneColor,
-                    Alpha = Flags.StoneAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.NodeEspDistance,
                 })
             elseif Flags.MetalEsp and Node.Name == "Metal_Node" then
+                local color, alpha = FetchRowColor(MetalRow, Flags.MetalColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Metal Node",
-                    Color = Flags.MetalColor,
-                    Alpha = Flags.MetalAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.NodeEspDistance,
                 })
             elseif Flags.PhosphateEsp and Node.Name == "Phosphate_Node" then
+                local color, alpha = FetchRowColor(PhosphateRow, Flags.PhosphateColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Phosphate Node",
-                    Color = Flags.PhosphateColor,
-                    Alpha = Flags.PhosphateAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.NodeEspDistance,
                 })
             end
@@ -1238,35 +1264,39 @@ do
                 continue
             end
             if Flags.WoolEsp and Plant.Name == "Wool Plant" then
+                local color, alpha = FetchRowColor(WoolRow, Flags.WoolColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Wool",
-                    Color = Flags.WoolColor,
-                    Alpha = Flags.WoolAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.PlantEspDistance,
                 })
             elseif Flags.TomatoEsp and Plant.Name == "Tomato Plant" then
+                local color, alpha = FetchRowColor(TomatoRow, Flags.TomatoColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Tomato",
-                    Color = Flags.TomatoColor,
-                    Alpha = Flags.TomatoAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.PlantEspDistance,
                 })
             elseif Flags.PumpkinEsp and Plant.Name == "Pumpkin Plant" then
+                local color, alpha = FetchRowColor(PumpkinRow, Flags.PumpkinColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Pumpkin",
-                    Color = Flags.PumpkinColor,
-                    Alpha = Flags.PumpkinAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.PlantEspDistance,
                 })
             elseif Flags.CornEsp and Plant.Name == "Corn Plant" then
+                local color, alpha = FetchRowColor(CornRow, Flags.CornColor)
                 table.insert(Entries, {
                     Position = BasePart.Position + Vector3.new(0, 1, 0),
                     Text = "Corn",
-                    Color = Flags.CornColor,
-                    Alpha = Flags.CornAlpha,
+                    Color = color,
+                    Alpha = alpha,
                     MaxDistance = Flags.PlantEspDistance,
                 })
             end
@@ -1280,6 +1310,7 @@ do
         if not Minis then
             return Entries
         end
+        local color, alpha = FetchRowColor(MiniRow, Flags.MinicopterColor)
         for _, Mini in Minis:GetChildren() do
             if not Mini:IsA("Model") then
                 continue
@@ -1291,8 +1322,8 @@ do
             table.insert(Entries, {
                 Position = BasePart.Position + Vector3.new(0, 1, 0),
                 Text = "Minicopter",
-                Color = Flags.MinicopterColor,
-                Alpha = Flags.MinicopterAlpha,
+                Color = color,
+                Alpha = alpha,
                 MaxDistance = Flags.MiniEspDistance,
             })
         end
@@ -1355,13 +1386,14 @@ do
         CleanRaidCache()
         UpdateRaidCache()
         local Now = tick()
+        local color, alpha = FetchRowColor(RaidRow, Flags.RaidColor)
         for _, Cached in RaidCache do
             local TimeLeft = math.ceil(RAID_EXPIRE_TIME - (Now - Cached.Time))
             table.insert(Entries, {
                 Position = Cached.Position + Vector3.new(0, 1, 0),
                 Text = "Raid (" .. TimeLeft .. "s)",
-                Color = Flags.RaidColor,
-                Alpha = Flags.RaidAlpha,
+                Color = color,
+                Alpha = alpha,
                 MaxDistance = Flags.RaidEspDistance,
             })
         end
