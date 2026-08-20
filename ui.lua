@@ -1113,6 +1113,17 @@ local function newItem(page, kind, cfg, height)
         item.onColor = cfg.OnColor
         item.swatch = swatch(item, cfg.Color, cfg.Clear, 1)
         if cfg.Color2 then item.swatch2 = swatch(item, cfg.Color2, cfg.Clear2, 2) end
+        function item:GetColor(index)
+            local sw = (index == 2) and self.swatch2 or self.swatch
+            if not sw then return nil end
+            return sw.color, 1 - sw.alpha
+        end
+        function item:SetColor(color, index)
+            local sw = (index == 2) and self.swatch2 or self.swatch
+            if not sw then return end
+            sw.hue, sw.sat, sw.val = tohsv(color)
+            applyColor(sw)
+        end
     end
     if cfg.Option then
         item.option = setmetatable({ items = {} }, { __index = Page })
