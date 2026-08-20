@@ -1229,6 +1229,7 @@ function Page:Color(cfg)
     item.color = cfg.Default or Theme.accent
     item.alpha = 1 - (cfg.Clear or 0)
     item.hue, item.sat, item.val = tohsv(item.color)
+    setFlag(item, item.color)
     function item:Set(c)
         self.color = c
         self.hue, self.sat, self.val = tohsv(c)
