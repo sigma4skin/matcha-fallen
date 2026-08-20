@@ -1163,11 +1163,21 @@ function Page:Toggle(cfg)
     return item
 end
 
+local function stepDigits(step)
+    local digits, scaled = 0, step
+    while digits < 6 and abs(scaled - floor(scaled + 0.5)) > 1e-9 do
+        scaled = scaled * 10
+        digits = digits + 1
+    end
+    return digits
+end
+
 function Page:Slider(cfg)
     local item = newItem(self, "slider", cfg, L.capH + L.trackH)
     item.min, item.max = cfg.Min or 0, cfg.Max or 100
-    item.round, item.suffix = cfg.Round or 0, cfg.Suffix or ""
+    item.suffix = cfg.Suffix or ""
     item.step = max(0, tonumber(cfg.Step) or 0)
+    item.round = cfg.Round or (item.step > 0 and stepDigits(item.step)) or 0
     item.value = cfg.Default or item.min
     setFlag(item, item.value)
     function item:Set(v)
