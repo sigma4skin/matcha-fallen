@@ -714,15 +714,26 @@ for i = 0, 25 do
 end
 for i = 1, 12 do bind("f" .. i, 0x6F + i) end
 bind("lshift", 0xA0) bind("rshift", 0xA1) bind("lctrl", 0xA2) bind("rctrl", 0xA3)
+bind("lalt", 0xA4) bind("ralt", 0xA5)
 bind("semicolon", 0xBA, ";", ":") bind("plus", 0xBB, "=", "+") bind("comma", 0xBC, ",", "<")
 bind("minus", 0xBD, "-", "_") bind("period", 0xBE, ".", ">") bind("slash", 0xBF, "/", "?")
 bind("tilde", 0xC0, "`", "~") bind("lbracket", 0xDB, "[", "{") bind("backslash", 0xDC, "\\", "|")
 bind("rbracket", 0xDD, "]", "}") bind("quote", 0xDE, "'", "\"")
 Named[0xA0], Named[0xA1] = "LShift", "RShift"
 Named[0xA2], Named[0xA3] = "LCtrl", "RCtrl"
+Named[0xA4], Named[0xA5] = "LAlt", "RAlt"
+Named[0x01], Named[0x02] = "MB1", "MB2"
 Named[0x20], Named[0x0D], Named[0x1B], Named[0x2D] = "Space", "Enter", "Esc", "Insert"
 Named[0x04], Named[0x05], Named[0x06] = "MMB", "MB4", "MB5"
 Named[0x101], Named[0x102] = "WheelUp", "WheelDn"
+
+local Sided = { shift = { "lshift", "rshift" }, ctrl = { "lctrl", "rctrl" }, alt = { "lalt", "ralt" } }
+
+local function sideHeld(name)
+    local pair = Sided[name]
+    if not pair then return false end
+    return Key[pair[1]].down or Key[pair[2]].down
+end
 
 local S = {
     open = false, show = 0, x = 0, y = 0, w = 800, h = 800,
@@ -734,7 +745,7 @@ local S = {
     dragging = false, dragX = 0, dragY = 0,
     slide = nil, caret = nil, pick = nil, bar = nil,
     alive = true, tip = nil, key = "f1", title = "menu", suffix = nil,
-    binds = {}, frames = 0, lastError = nil,
+    binds = {}, frames = 0, lastError = nil, grabWait = nil,
 }
 
 local Mouse = nil
@@ -780,7 +791,8 @@ local function pollKeys(everything)
     end
     for i = 1, #S.binds do
         local item = S.binds[i]
-        local k = item.bind and Key[item.bind]
+        local name = item.bind
+        local k = name and name ~= "m1" and name ~= "m2" and Key[name]
         if k and not seen[k.id] then seen[k.id] = true; poll(k) end
     end
 end
@@ -831,6 +843,7 @@ end
 
 local function hit(x, y, w, h)
     if S.locked or S.tookClick or not Key.m1.hit or S.layer < S.floor then return false end
+    if S.grab and not S.grabWait then return false end
     if not inside(x, y, w, h) then return false end
     S.tookClick = true
     return true
@@ -838,6 +851,7 @@ end
 
 local function rightHit(x, y, w, h)
     if S.locked or S.tookRight or not Key.m2.hit or S.layer < S.floor then return false end
+    if S.grab and not S.grabWait then return false end
     if not inside(x, y, w, h) then return false end
     S.tookRight = true
     return true
@@ -1142,11 +1156,16 @@ function Page:Slider(cfg)
     local item = newItem(self, "slider", cfg, L.capH + L.trackH)
     item.min, item.max = cfg.Min or 0, cfg.Max or 100
     item.round, item.suffix = cfg.Round or 0, cfg.Suffix or ""
+    item.step = max(0, tonumber(cfg.Step) or 0)
     item.value = cfg.Default or item.min
     setFlag(item, item.value)
     function item:Set(v)
         local q = 10 ^ self.round
-        v = floor(clamp(v, self.min, self.max) * q + 0.5) / q
+        v = clamp(v, self.min, self.max)
+        if self.step > 0 and v > self.min and v < self.max then
+            v = clamp(self.min + floor((v - self.min) / self.step + 0.5) * self.step, self.min, self.max)
+        end
+        v = floor(v * q + 0.5) / q
         if v ~= self.value then
             self.value = v
             setFlag(self, v)
@@ -1398,7 +1417,7 @@ local function bindChip(item, right, y, alpha, z)
         labelmid(bindName(item), x + L.keyW / 2, y + px(6), Theme.white, L.fSmall,
             z + 16, (0.9 + 0.1 * glow) * alpha)
     end
-    if hit(x, y, L.keyW, L.rowH) then S.grab, S.focus = item, nil end
+    if hit(x, y, L.keyW, L.rowH) then S.grab, S.focus, S.grabWait = item, nil, true end
     return x - L.step
 end
 
@@ -1837,7 +1856,7 @@ function Pop.hotkey(pop, alpha, t, z)
             (0.75 + 0.25 * boxGlow) * ra)
     end
     if hit(ax, by, boxW, boxH) then
-        S.grab, S.focus = item, nil
+        S.grab, S.focus, S.grabWait = item, nil, true
         registerBind(item)
     end
 
@@ -1846,7 +1865,7 @@ function Pop.hotkey(pop, alpha, t, z)
     trashCan(binX + binW / 2, ry + rowH / 2, px(14), mix(Theme.dim, Theme.white, binGlow),
         z + 14, (0.8 + 0.2 * binGlow) * ra)
     if hit(binX, ry, binW, rowH) then
-        if grabbing then S.grab = nil end
+        if grabbing then S.grab, S.grabWait = nil, nil end
         item.bind, item.hotRow, item.bindOn = nil, nil, false
         if item.kind ~= "keybind" then
             syncToggle(item)
@@ -2266,6 +2285,7 @@ local function runBinds()
             end
         end
         local k = item.bindMode ~= "always" and item.bind and Key[item.bind]
+        if k and S.capturing and (item.bind == "m1" or item.bind == "m2") then k = nil end
         if k then
             if item.bindArmed then
                 if not k.down then item.bindArmed = nil end
@@ -2294,14 +2314,18 @@ end
 local function grabKey()
     if not S.grab then return end
     local item = S.grab
+    if S.grabWait then
+        if Key.m1.down or Key.m2.down then return end
+        S.grabWait = nil
+    end
     for _, name in ipairs(Order) do
         local k = Key[name]
-        if k.hit and name ~= "m1" and name ~= "m2" then
-            item.bind = (name == "esc") and nil or name
+        if k.hit and not sideHeld(name) then
+            if name == "esc" then item.bind = nil else item.bind = name end
             item.bindArmed = true
             item.bindOn = false
             if item.bind then registerBind(item) end
-            S.grab, k.hit = nil, false
+            S.grab, S.grabWait, k.hit = nil, nil, false
             Key.m1.hit, Key.m2.hit = false, false
             fire(item.onBind, item.bind)
             break
